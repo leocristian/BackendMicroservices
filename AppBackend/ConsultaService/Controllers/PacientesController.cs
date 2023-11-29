@@ -5,26 +5,26 @@ using ConsultaService.Models;
 namespace ConsultaService.Controllers {
 
     [ApiController]
-    [Route("pacientes")]
     public class PacientesController : ControllerBase {
 
-        public PacienteService pacienteService = new PacienteService();
+        public PacientesService pacientesService = new PacientesService();
 
         [HttpGet]
+        [Route("pacientes")]
         public async Task<IActionResult> Get() {
             List<Paciente> pacientes = new List<Paciente>();
 
-            pacientes = await pacienteService.GetAll();
+            pacientes = await pacientesService.GetAll();
 
             return Ok(pacientes);
         }
 
         [HttpGet]
-        [Route("/index/{id}")]
+        [Route("pacientes/[action]")]
         public async Task<IActionResult> GetById(int id) {
             Paciente? paciente;
 
-            paciente = await pacienteService.FindById(id);
+            paciente = await pacientesService.FindById(id);
 
             if (paciente is null) {
                 return NotFound();
@@ -34,11 +34,11 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpGet]
-        [Route("/index/{cpf}")]
+        [Route("pacientes/[action]")]
         public async Task<IActionResult> GetByCpf(string cpf) {
             Paciente? paciente;
 
-            paciente = await pacienteService.FindByCpf(cpf);
+            paciente = await pacientesService.FindByCpf(cpf);
 
             if (paciente is null) {
                 return NotFound();
@@ -48,9 +48,10 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpPost]
+        [Route("pacientes/novo")]
         public async Task<IActionResult> Post(Paciente paciente) {
 
-            await pacienteService.Insert(paciente);
+            await pacientesService.Insert(paciente);
 
             return Ok();
         }

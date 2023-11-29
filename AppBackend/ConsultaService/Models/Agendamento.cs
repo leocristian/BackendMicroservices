@@ -1,5 +1,5 @@
 ﻿namespace ConsultaService.Models {
-    public class Consulta {
+    public class Agendamento {
 
         public int Id { get; set; }
         public int IdPaciente { get; set; }
@@ -9,7 +9,7 @@
         public string Local { get; set; }
         public string Observacoes { get; set; }
 
-        public Consulta(int id, int idPaciente, int idEnfermeiro, string descricao, DateTime dataHora, string local, string observacoes) {
+        public Agendamento(int id, int idPaciente, int idEnfermeiro, string descricao, DateTime dataHora, string local, string observacoes) {
             Id = id;
             IdPaciente = idPaciente;
             IdEnfermeiro = idEnfermeiro;

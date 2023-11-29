@@ -1,25 +1,21 @@
 ﻿using ConsultaService.Models;
 using ConsultaService.Connection;
-using System.Collections.Generic;
-using System.Globalization;
 using Npgsql;
 
 namespace ConsultaService.Services {
-    public class PacienteService {
+    public class PacientesService {
 
         private string NOME_TABELA = "pacientes";
 
         private PgConnection connection;
 
-        public PacienteService() {
+        public PacientesService() {
             connection = new PgConnection();
         }
 
         public async Task<List<Paciente>> GetAll() {
-
-            string _sql = $"select * from {NOME_TABELA}";
-
             List<Paciente> pacientes = new List<Paciente>();
+            string _sql = $"select * from {NOME_TABELA}";
 
             try {
                 await using var command = connection.dataSource.CreateCommand(_sql);
@@ -47,7 +43,7 @@ namespace ConsultaService.Services {
 
         public async Task Insert(Paciente paciente) { 
 
-            string _sql = "insert into pacientes(nome_completo, email, telefone, data_nascimento, cpf, endereco, numero_sus) " +
+            string _sql = $"insert into {NOME_TABELA}(nome_completo, email, telefone, data_nascimento, cpf, endereco, numero_sus) " +
                           "values ($1, $2, $3, $4, $5, $6, $7)";
 
             try {
@@ -74,14 +70,12 @@ namespace ConsultaService.Services {
 
             Paciente? paciente;
 
-            string _sql = $"select * from pacientes where id = {id}";
+            string _sql = $"select * from {NOME_TABELA} where id = {id}";
 
             await using var command = connection.dataSource.CreateCommand(_sql);
             await using var result = await command.ExecuteReaderAsync();
 
-            try {
-                await result.ReadAsync();
-
+            if (await result.ReadAsync()) {
                 paciente = new Paciente(
                     result.GetFieldValue<int>(0),
                     result.GetFieldValue<String>(1),
@@ -92,8 +86,7 @@ namespace ConsultaService.Services {
                     result.GetFieldValue<String>(6),
                     result.GetFieldValue<String>(7)
                 );
-            } catch (Exception e) {
-                Console.WriteLine(e.Message);
+            } else {
                 paciente = null;
             }
             
@@ -104,14 +97,12 @@ namespace ConsultaService.Services {
 
             Paciente? paciente;
 
-            string _sql = $"select * from pacientes where cpf = {cpf}";
+            string _sql = $"select * from {NOME_TABELA} where cpf = '{cpf}' ";
 
             await using var command = connection.dataSource.CreateCommand(_sql);
             await using var result = await command.ExecuteReaderAsync();
 
-            try {
-                await result.ReadAsync();
-
+            if (await result.ReadAsync()) {
                 paciente = new Paciente(
                     result.GetFieldValue<int>(0),
                     result.GetFieldValue<String>(1),
@@ -122,12 +113,12 @@ namespace ConsultaService.Services {
                     result.GetFieldValue<String>(6),
                     result.GetFieldValue<String>(7)
                 );
-            } catch (Exception e) {
-                Console.WriteLine(e.Message);
+            } else {
                 paciente = null;
             }
             
             return paciente;
         }
+
     }
 }
