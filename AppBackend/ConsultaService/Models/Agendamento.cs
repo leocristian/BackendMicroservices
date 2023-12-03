@@ -6,18 +6,17 @@
         public int IdEnfermeiro { get; set; }
         public string Descricao { get; set; }
         public DateTime DataHora { get; set; }
-        public string Local { get; set; }
+        public int IdLocal { get; set; }
         public string Observacoes { get; set; }
 
-        public Agendamento(int id, int idPaciente, int idEnfermeiro, string descricao, DateTime dataHora, string local, string observacoes) {
+        public Agendamento(int id, int idPaciente, int idEnfermeiro, string descricao, DateTime dataHora, int idLocal, string observacoes) {
             Id = id;
             IdPaciente = idPaciente;
             IdEnfermeiro = idEnfermeiro;
             Descricao = descricao;
             DataHora = dataHora;
-            Local = local;
+            IdLocal = idLocal;
             Observacoes = observacoes;
         }
-
     }
 }

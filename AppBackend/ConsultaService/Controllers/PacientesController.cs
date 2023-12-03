@@ -12,19 +12,15 @@ namespace ConsultaService.Controllers {
         [HttpGet]
         [Route("pacientes")]
         public async Task<IActionResult> Get() {
-            List<Paciente> pacientes = new List<Paciente>();
-
-            pacientes = await pacientesService.GetAll();
-
+            List<Paciente> pacientes = await pacientesService.GetAll();
+            
             return Ok(pacientes);
         }
 
         [HttpGet]
         [Route("pacientes/{id}")]
         public async Task<IActionResult> GetById(int id) {
-            Paciente? paciente;
-
-            paciente = await pacientesService.FindById(id);
+            Paciente? paciente = await pacientesService.FindById(id);;
 
             if (paciente is null) {
                 return NotFound();
@@ -36,7 +32,6 @@ namespace ConsultaService.Controllers {
         [HttpPost]
         [Route("pacientes/novo")]
         public async Task<IActionResult> Post(Paciente paciente) {
-
             try { 
                 await pacientesService.Insert(paciente);
                 return Ok();

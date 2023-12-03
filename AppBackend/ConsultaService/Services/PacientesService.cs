@@ -5,33 +5,34 @@ using Npgsql;
 namespace ConsultaService.Services {
     public class PacientesService {
 
-        private string NOME_TABELA = "pacientes";
+        private readonly string NOME_TABELA = "pacientes";
 
-        private PgConnection connection;
+        private readonly PgConnection connection;
 
         public PacientesService() {
             connection = new PgConnection();
         }
 
         public async Task<List<Paciente>> GetAll() {
-            List<Paciente> pacientes = new List<Paciente>();
+            List<Paciente> pacientes = new();
+            
             string _sql = $"select * from {NOME_TABELA}";
 
             try {
              
-                await using var command = connection.dataSource.CreateCommand(_sql);
-                await using var result  = await command.ExecuteReaderAsync();
+                await using NpgsqlCommand command   = connection.dataSource.CreateCommand(_sql);
+                await using NpgsqlDataReader result = await command.ExecuteReaderAsync();
 
                 while (await result.ReadAsync()) {
                     pacientes.Add(new Paciente(
                         result.GetFieldValue<int>(0),
-                        result.GetFieldValue<String>(1),
-                        result.GetFieldValue<String>(2),
-                        result.GetFieldValue<String>(3),
+                        result.GetFieldValue<string>(1),
+                        result.GetFieldValue<string>(2),
+                        result.GetFieldValue<string>(3),
                         result.GetFieldValue<DateOnly>(4),
-                        result.GetFieldValue<String>(5),
-                        result.GetFieldValue<String>(6),
-                        result.GetFieldValue<String>(7)
+                        result.GetFieldValue<string>(5),
+                        result.GetFieldValue<string>(6),
+                        result.GetFieldValue<string>(7)
                     ));
                 }
 
@@ -48,7 +49,7 @@ namespace ConsultaService.Services {
                           "values ($1, $2, $3, $4, $5, $6, $7)";
 
             try {
-                await using var command = new NpgsqlCommand(_sql, await connection.dataSource.OpenConnectionAsync()) {
+                await using NpgsqlCommand command = new NpgsqlCommand(_sql, await connection.Open()) {
                     Parameters = {
                         new() { Value = paciente.NomeCompleto },
                         new() { Value = paciente.Email },
@@ -73,19 +74,19 @@ namespace ConsultaService.Services {
 
             string _sql = $"select * from {NOME_TABELA} where id = {id}";
 
-            await using var command = connection.dataSource.CreateCommand(_sql);
-            await using var result = await command.ExecuteReaderAsync();
+            await using NpgsqlCommand command = connection.dataSource.CreateCommand(_sql);
+            await using NpgsqlDataReader result = await command.ExecuteReaderAsync();
 
             if (await result.ReadAsync()) {
                 paciente = new Paciente(
                     result.GetFieldValue<int>(0),
-                    result.GetFieldValue<String>(1),
-                    result.GetFieldValue<String>(2),
-                    result.GetFieldValue<String>(3),
+                    result.GetFieldValue<string>(1),
+                    result.GetFieldValue<string>(2),
+                    result.GetFieldValue<string>(3),
                     result.GetFieldValue<DateOnly>(4),
-                    result.GetFieldValue<String>(5),
-                    result.GetFieldValue<String>(6),
-                    result.GetFieldValue<String>(7)
+                    result.GetFieldValue<string>(5),
+                    result.GetFieldValue<string>(6),
+                    result.GetFieldValue<string>(7)
                 );
             } else {
                 paciente = null;
@@ -100,19 +101,19 @@ namespace ConsultaService.Services {
 
             string _sql = $"select * from {NOME_TABELA} where cpf = '{cpf}' ";
 
-            await using var command = connection.dataSource.CreateCommand(_sql);
-            await using var result = await command.ExecuteReaderAsync();
+            await using NpgsqlCommand command = connection.dataSource.CreateCommand(_sql);
+            await using NpgsqlDataReader result = await command.ExecuteReaderAsync();
 
             if (await result.ReadAsync()) {
                 paciente = new Paciente(
                     result.GetFieldValue<int>(0),
-                    result.GetFieldValue<String>(1),
-                    result.GetFieldValue<String>(2),
-                    result.GetFieldValue<String>(3),
+                    result.GetFieldValue<string>(1),
+                    result.GetFieldValue<string>(2),
+                    result.GetFieldValue<string>(3),
                     result.GetFieldValue<DateOnly>(4),
-                    result.GetFieldValue<String>(5),
-                    result.GetFieldValue<String>(6),
-                    result.GetFieldValue<String>(7)
+                    result.GetFieldValue<string>(5),
+                    result.GetFieldValue<string>(6),
+                    result.GetFieldValue<string>(7)
                 );
             } else {
                 paciente = null;

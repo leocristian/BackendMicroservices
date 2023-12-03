@@ -10,12 +10,10 @@ namespace ConsultaService.Controllers {
         public AgendamentosService agendamentosService = new AgendamentosService();
 
         [HttpGet]
-        [Route("pacientes/{idPaciente}/agendamentos")]
-        public async Task<IActionResult> GetAllFromPaciente(int idPaciente) {
+        [Route("pacientes/{id}/agendamentos")]
+        public async Task<IActionResult> GetAllFromPaciente(int id) {
 
-            List<Agendamento> agendamentos = new List<Agendamento>();
-
-            agendamentos = await agendamentosService.GetAllFromPaciente(idPaciente);
+            List<Agendamento> agendamentos = await agendamentosService.GetAllFromPaciente(id); 
 
             return Ok(agendamentos);
         }
@@ -23,19 +21,27 @@ namespace ConsultaService.Controllers {
         [HttpGet]
         [Route("pacientes/{idPaciente}/agendamentos/{idAgendamento}")]
         public async Task<IActionResult> GetById(int idPaciente, int idAgendamento) {
+            try {
 
-            List<Agendamento> agendamentos = new List<Agendamento>();
+                Agendamento? agendamento = await agendamentosService.GetById(idPaciente, idAgendamento);
 
-            agendamentos = await agendamentosService.GetById(idPaciente, idAgendamento);
-
-            return Ok(agendamentos);
+                if (agendamento is not null) {
+                    return Ok(agendamento);
+                } else {
+                    return NotFound();
+                }
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return Problem("Erro interno no servidor", null, 500);
+            }
         }
 
         [HttpPost]
-        [Route("pacientes/{idPaciente}/agendamentos/novo")]
-        public async Task<IActionResult> Post(Agendamento agendamento) {
+        [Route("pacientes/{id}/agendamentos/novo")]
+        public async Task<IActionResult> Post(Agendamento agendamento, int id) {
 
             try {
+                agendamento.IdPaciente = id;
                 await agendamentosService.Insert(agendamento);
                 return Ok();
             } catch (Exception e) {
