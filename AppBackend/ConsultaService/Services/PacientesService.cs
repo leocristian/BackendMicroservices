@@ -18,8 +18,9 @@ namespace ConsultaService.Services {
             string _sql = $"select * from {NOME_TABELA}";
 
             try {
+             
                 await using var command = connection.dataSource.CreateCommand(_sql);
-                await using var result = await command.ExecuteReaderAsync();
+                await using var result  = await command.ExecuteReaderAsync();
 
                 while (await result.ReadAsync()) {
                     pacientes.Add(new Paciente(
@@ -61,8 +62,8 @@ namespace ConsultaService.Services {
 
                 await command.ExecuteNonQueryAsync();
                 
-            } catch(Exception e) {
-                Console.WriteLine(e.Message);
+            } catch(NpgsqlException e) {
+                throw new NpgsqlException(e.Message);
             }
         }
 
@@ -119,6 +120,5 @@ namespace ConsultaService.Services {
             
             return paciente;
         }
-
     }
 }

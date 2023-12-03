@@ -20,7 +20,7 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpGet]
-        [Route("pacientes/[action]")]
+        [Route("pacientes/{id}")]
         public async Task<IActionResult> GetById(int id) {
             Paciente? paciente;
 
@@ -33,27 +33,17 @@ namespace ConsultaService.Controllers {
             }            
         }
 
-        [HttpGet]
-        [Route("pacientes/[action]")]
-        public async Task<IActionResult> GetByCpf(string cpf) {
-            Paciente? paciente;
-
-            paciente = await pacientesService.FindByCpf(cpf);
-
-            if (paciente is null) {
-                return NotFound();
-            } else {
-                return Ok(paciente);
-            }
-        }
-
         [HttpPost]
         [Route("pacientes/novo")]
         public async Task<IActionResult> Post(Paciente paciente) {
 
-            await pacientesService.Insert(paciente);
-
-            return Ok();
+            try { 
+                await pacientesService.Insert(paciente);
+                return Ok();
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return Problem("Erro interno no servidor", null, 500);
+            }            
         }
     }
 }

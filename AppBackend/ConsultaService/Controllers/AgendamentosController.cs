@@ -10,7 +10,7 @@ namespace ConsultaService.Controllers {
         public AgendamentosService agendamentosService = new AgendamentosService();
 
         [HttpGet]
-        [Route("pacientes/{id}/agendamentos")]
+        [Route("pacientes/{idPaciente}/agendamentos")]
         public async Task<IActionResult> GetAllFromPaciente(int idPaciente) {
 
             List<Agendamento> agendamentos = new List<Agendamento>();
@@ -35,9 +35,13 @@ namespace ConsultaService.Controllers {
         [Route("pacientes/{idPaciente}/agendamentos/novo")]
         public async Task<IActionResult> Post(Agendamento agendamento) {
 
-            await Task.Delay(500);
-
-            return Ok();
+            try {
+                await agendamentosService.Insert(agendamento);
+                return Ok();
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return Problem("Erro interno no servidor", null, 500);
+            }
         }
     }
 }

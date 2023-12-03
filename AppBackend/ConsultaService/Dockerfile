@@ -1,22 +1,15 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 8000
-EXPOSE 8001
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build # Extrair a imagem do .NET (pull)
+WORKDIR /src # Definição do diretório na imagem
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-WORKDIR /src
-COPY ["ConsultaService/ConsultaService.csproj", "ConsultaService/"]
-RUN dotnet restore "ConsultaService/ConsultaService.csproj"
+COPY ConsultaService.csproj . 
+RUN dotnet restore # Baixar as dependências do aplicativo contidas no arquivo .csproj
 COPY . .
-WORKDIR "/src/ConsultaService"
-RUN dotnet build "ConsultaService.csproj" -c Release -o /app/build
 
-FROM build AS publish
-RUN dotnet publish "ConsultaService.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish -c release -o /app # Compila a aplicação, verifica as dependências e publica os resultados em um novo diretório
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ConsultaService.dll"]
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 # Extrai a imagem do aspnet 6.0
+WORKDIR /app # Definição do diretório da imagem
+COPY --from=build /app . # Copia tudo que foi feito em build e cola no novo diretório "app"
+ENTRYPOINT ["dotnet", "ConsultaService.dll"] # Especificação do comando para executar a dll gerada na compuilação
