@@ -12,9 +12,13 @@ namespace ConsultaService.Controllers {
         [HttpGet]
         [Route("pacientes")]
         public async Task<IActionResult> Get() {
-            List<Paciente> pacientes = await pacientesService.GetAll();
-            
-            return Ok(pacientes);
+            try {
+                List<Paciente> pacientes = await pacientesService.GetAll();
+                return Ok(pacientes);    
+            } catch(Exception e) {
+                Console.WriteLine(e.Message);
+                return Problem("Erro interno no servidor", null, 500);
+            }
         }
 
         [HttpGet]
@@ -35,7 +39,7 @@ namespace ConsultaService.Controllers {
             try { 
                 await pacientesService.Insert(paciente);
                 return Ok();
-            } catch (Exception e) {
+            } catch (Exception e) {             
                 Console.WriteLine(e.Message);
                 return Problem("Erro interno no servidor", null, 500);
             }            

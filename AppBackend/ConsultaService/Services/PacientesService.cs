@@ -36,8 +36,8 @@ namespace ConsultaService.Services {
                     ));
                 }
 
-            } catch(Exception e) {
-                Console.WriteLine(e.Message);
+            } catch(NpgsqlException e) {
+                throw new NpgsqlException(e.Message);
             }
 
             return pacientes;
