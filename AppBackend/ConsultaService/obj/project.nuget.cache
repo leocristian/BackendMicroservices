@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "/2kW23T9MF6yODM00UnWW4VujvICHlKZBon6YtfFVxThSw/OCpSBgUDlCws7FIyOhJ6u13q/R31HNqOwxY2Egg==",
+  "dgSpecHash": "fBsC7vb3uNeYVtgLVa0xhf2+MMWmwqplADnfv1gizPYL2Il7sFabbmG5OeY0qL6Oii+mis8XESpMmr2NJTt3Bg==",
   "success": true,
   "projectFilePath": "C:\\Users\\leonardo\\Desktop\\github\\BackendMicroservices\\AppBackend\\ConsultaService\\ConsultaService.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\leonardo\\.nuget\\packages\\dotenv.net\\3.1.3\\dotenv.net.3.1.3.nupkg.sha512",
     "C:\\Users\\leonardo\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
     "C:\\Users\\leonardo\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\leonardo\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.0\\microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",

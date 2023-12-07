@@ -2,6 +2,15 @@
   "version": 3,
   "targets": {
     "net6.0": {
+      "dotenv.net/3.1.3": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/dotenv.net.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/dotenv.net.dll": {}
+        }
+      },
       "Microsoft.Extensions.ApiDescription.Server/3.0.0": {
         "type": "package",
         "build": {
@@ -233,6 +242,21 @@
     }
   },
   "libraries": {
+    "dotenv.net/3.1.3": {
+      "sha512": "gzksGrozUM/6OzBL2M99EINDLB5vhZScnRw5/oYaKx0O4PWusCBzzq9JCofhP8nL3uoli6V7SLmrwpF/PTj8XQ==",
+      "type": "package",
+      "path": "dotenv.net/3.1.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "dotenv.net.3.1.3.nupkg.sha512",
+        "dotenv.net.nuspec",
+        "lib/netstandard1.6/dotenv.net.dll",
+        "lib/netstandard2.0/dotenv.net.dll",
+        "lib/netstandard2.1/dotenv.net.dll"
+      ]
+    },
     "Microsoft.Extensions.ApiDescription.Server/3.0.0": {
       "sha512": "LH4OE/76F6sOCslif7+Xh3fS/wUUrE5ryeXAMcoCnuwOQGT5Smw0p57IgDh/pHgHaGz/e+AmEQb7pRgb++wt0w==",
       "type": "package",
@@ -733,7 +757,8 @@
     "net6.0": [
       "Microsoft.VisualStudio.Azure.Containers.Tools.Targets >= 1.17.0",
       "Npgsql >= 8.0.0",
-      "Swashbuckle.AspNetCore >= 6.2.3"
+      "Swashbuckle.AspNetCore >= 6.2.3",
+      "dotenv.net >= 3.1.3"
     ]
   },
   "packageFolders": {
@@ -795,6 +820,10 @@
           "Swashbuckle.AspNetCore": {
             "target": "Package",
             "version": "[6.2.3, )"
+          },
+          "dotenv.net": {
+            "target": "Package",
+            "version": "[3.1.3, )"
           }
         },
         "imports": [

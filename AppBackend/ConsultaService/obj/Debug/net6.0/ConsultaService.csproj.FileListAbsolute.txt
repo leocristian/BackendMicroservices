@@ -76,3 +76,4 @@ C:\Users\leonardo\Desktop\github\BackendMicroservices\AppBackend\ConsultaService
 C:\Users\leonardo\Desktop\github\BackendMicroservices\AppBackend\ConsultaService\obj\Debug\net6.0\ConsultaService.pdb
 C:\Users\leonardo\Desktop\github\BackendMicroservices\AppBackend\ConsultaService\obj\Debug\net6.0\ConsultaService.genruntimeconfig.cache
 C:\Users\leonardo\Desktop\github\BackendMicroservices\AppBackend\ConsultaService\obj\Debug\net6.0\ref\ConsultaService.dll
+C:\Users\leonardo\Desktop\github\BackendMicroservices\AppBackend\ConsultaService\bin\Debug\net6.0\dotenv.net.dll

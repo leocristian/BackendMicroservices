@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "4ek9Opaz6g4wonHmqp1nFev9+7GM+oNAH1FKZJr1qCD8fo2j5hPtCTUzvgxj6KFAePKEFdVkJRNxZndUxcPElg==",
+  "dgSpecHash": "VbLpriobSmU9bHE/wbT57oMfSdCzNVgW/nK1LgLki18xHUscpvlPoBlgIJe9sJyB9rUG9f2tT7s92mAt2rKv7g==",
   "success": true,
   "projectFilePath": "C:\\Users\\leonardo\\Desktop\\github\\BackendMicroservices\\AppBackend\\EnfermeiroService\\EnfermeiroService.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\leonardo\\.nuget\\packages\\dotenv.net\\3.1.3\\dotenv.net.3.1.3.nupkg.sha512",
     "C:\\Users\\leonardo\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
     "C:\\Users\\leonardo\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\leonardo\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.0\\microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",

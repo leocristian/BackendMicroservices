@@ -37,3 +37,4 @@ C:\Users\leonardo\Desktop\github\BackendMicroservices\AppBackend\EnfermeiroServi
 C:\Users\leonardo\Desktop\github\BackendMicroservices\AppBackend\EnfermeiroService\bin\Debug\net6.0\System.Text.Encodings.Web.dll
 C:\Users\leonardo\Desktop\github\BackendMicroservices\AppBackend\EnfermeiroService\bin\Debug\net6.0\System.Text.Json.dll
 C:\Users\leonardo\Desktop\github\BackendMicroservices\AppBackend\EnfermeiroService\bin\Debug\net6.0\runtimes\browser\lib\net6.0\System.Text.Encodings.Web.dll
+C:\Users\leonardo\Desktop\github\BackendMicroservices\AppBackend\EnfermeiroService\bin\Debug\net6.0\dotenv.net.dll

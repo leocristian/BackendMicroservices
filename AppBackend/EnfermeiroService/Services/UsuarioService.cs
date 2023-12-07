@@ -12,7 +12,7 @@ namespace EnfermeiroService.Services {
             connection = new();
         }
         public async Task SignUp(Usuario usuario) {
-            string _sql = $"insert into usuarios (cpf, telefone, nome_completo, coren, data_nascimento, login, senha) " +
+            string _sql = $"insert into {NOME_TABELA} (cpf, telefone, nome_completo, coren, data_nascimento, login, senha) " +
                            "values ($1, $2, $3, $4, $5, %6, $7)";
 
             try {
