@@ -20,6 +20,6 @@ CREATE TABLE IF NOT EXISTS public.enfermeiros
     coren character varying(10),
     data_nascimento date not null,
     nome_login character varying(20),
-    senha character varyingg(100),
+    senha text not null,
     constraint enfermeiros_pkey primary key (id)
 )
