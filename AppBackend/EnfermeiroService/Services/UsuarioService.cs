@@ -8,15 +8,14 @@ namespace EnfermeiroService.Services {
         
         private readonly string NOME_TABELA = "enfermeiros";
         private readonly PgConnection connection;
-        private readonly IDictionary<string, string> variaveis = DotEnv.Read();
 
-        public UsuarioService() {
-            connection = new();
+        public UsuarioService(PgConnection pgConnection) {
+            connection = pgConnection;
         }
 
         public async Task<Usuario?> ReadByLogin(string username, string senha) {
             Usuario? usuario;
-            string _sql = $"select * from enfermeiros where nome_login='{username}' and senha = crypt('{senha+variaveis["SEMENTE"]}', senha)";
+            string _sql = $"select * from enfermeiros where nome_login='{username}' and senha = crypt('{senha}', senha)";
 
             await using NpgsqlCommand command   = connection.dataSource.CreateCommand(_sql);
             await using NpgsqlDataReader result = await command.ExecuteReaderAsync();
@@ -57,7 +56,7 @@ namespace EnfermeiroService.Services {
                         new() { Value = usuario.Coren },
                         new() { Value = usuario.DataNascimento },
                         new() { Value = usuario.Login },
-                        new() { Value = usuario.Senha+variaveis["SEMENTE"] }
+                        new() { Value = usuario.Senha }
                     }
                 };
 

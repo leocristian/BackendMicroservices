@@ -7,13 +7,17 @@ namespace ConsultaService.Controllers {
     [ApiController]
     public class PacientesController : ControllerBase {
 
-        public PacientesService pacientesService = new PacientesService();
+        public PacientesService _pacientesService;
+
+        public PacientesController(PacientesService pacientesService) {
+            _pacientesService = pacientesService;
+        }
 
         [HttpGet]
         [Route("pacientes")]
         public async Task<IActionResult> Get() {
             try {
-                List<Paciente> pacientes = await pacientesService.GetAll();
+                List<Paciente> pacientes = await _pacientesService.GetAll();
                 return Ok(pacientes);    
             } catch(Exception e) {
                 Console.WriteLine(e.Message);
@@ -24,7 +28,7 @@ namespace ConsultaService.Controllers {
         [HttpGet]
         [Route("pacientes/{id}")]
         public async Task<IActionResult> GetById(int id) {
-            Paciente? paciente = await pacientesService.FindById(id);;
+            Paciente? paciente = await _pacientesService.FindById(id);;
 
             if (paciente is null) {
                 return NotFound();
@@ -37,7 +41,7 @@ namespace ConsultaService.Controllers {
         [Route("pacientes/novo")]
         public async Task<IActionResult> Post(Paciente paciente) {
             try { 
-                await pacientesService.Insert(paciente);
+                await _pacientesService.Insert(paciente);
                 return Ok();
             } catch (Exception e) {             
                 Console.WriteLine(e.Message);

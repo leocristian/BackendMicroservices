@@ -7,7 +7,11 @@ namespace EnfermeiroService.Controllers {
     [ApiController]
     public class UsuarioController : ControllerBase {
 
-        private readonly UsuarioService usuarioService = new();
+        public UsuarioService _usuarioService;
+
+        public UsuarioController(UsuarioService usuarioService) {
+            _usuarioService = usuarioService;
+        }
 
         [HttpPost]
         [Route("enfermeiro/login")]
@@ -15,7 +19,7 @@ namespace EnfermeiroService.Controllers {
             Usuario? usuario;
 
             try {
-                usuario = await usuarioService.ReadByLogin(username, senha);
+                usuario = await _usuarioService.ReadByLogin(username, senha);
                 if (usuario is not null) {
                     return Ok(usuario);
                 } else {
@@ -31,7 +35,7 @@ namespace EnfermeiroService.Controllers {
         [Route("enfemeiro/novo")]
         public async Task<IActionResult?> SignUp(Usuario usuario) {
             try {
-                await usuarioService.SignUp(usuario);
+                await _usuarioService.SignUp(usuario);
                 return Ok("Usuário cadastrado com sucesso!");
             } catch (Exception e) {
                 Console.WriteLine(e.Message);

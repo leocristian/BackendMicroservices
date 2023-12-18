@@ -9,10 +9,11 @@ namespace ConsultaService.Services {
 
         private readonly PgConnection connection;
 
-        public PacientesService() {
-            connection = new PgConnection();
+        public PacientesService(PgConnection pgConnection) {
+            connection = pgConnection;
+            Console.WriteLine("PacientesService Criado!");
         }
-
+    
         public async Task<List<Paciente>> GetAll() {
             List<Paciente> pacientes = new();
             

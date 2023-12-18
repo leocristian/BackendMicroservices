@@ -1,4 +1,5 @@
 using ConsultaService.Connection;
+using ConsultaService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton(new PgConnection());
+// Ler string de conexão 
+string ConnectionString = builder.Configuration["DataBase:ConnString"];
+
+builder.Services.AddSingleton(new PgConnection(ConnectionString));
+
+builder.Services.AddScoped<AgendamentosService>();
+builder.Services.AddScoped<PacientesService>();
+
+// Métodos para registro de dependências
+// AddSingleton - Cria uma única instância para toda a aplicação.
+// AddScoped - Cria uma nova insância a cada requisição, instância fica disponível somente dentro do contexto da solicitação
+// AddTransient - Cria uma nova instância toda vez que o serviço é chamado
 
 var app = builder.Build();
 
@@ -18,7 +30,6 @@ if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 
 app.UseHttpsRedirection();
 

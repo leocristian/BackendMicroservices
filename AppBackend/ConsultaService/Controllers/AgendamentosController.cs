@@ -7,13 +7,17 @@ namespace ConsultaService.Controllers {
     [ApiController]
     public class AgendamentosController : ControllerBase {
 
-        public AgendamentosService agendamentosService = new AgendamentosService();
+        public AgendamentosService _agendamentoService;
+
+        public AgendamentosController(AgendamentosService agendamentoService) {
+            _agendamentoService = agendamentoService;
+        }
 
         [HttpGet]
         [Route("pacientes/{id}/agendamentos")]
         public async Task<IActionResult> GetAllFromPaciente(int id) {
 
-            List<Agendamento> agendamentos = await agendamentosService.GetAllFromPaciente(id); 
+            List<Agendamento> agendamentos = await _agendamentoService.GetAllFromPaciente(id); 
 
             return Ok(agendamentos);
         }
@@ -23,7 +27,7 @@ namespace ConsultaService.Controllers {
         public async Task<IActionResult> GetById(int idPaciente, int idAgendamento) {
             try {
 
-                Agendamento? agendamento = await agendamentosService.GetById(idPaciente, idAgendamento);
+                Agendamento? agendamento = await _agendamentoService.GetById(idPaciente, idAgendamento);
 
                 if (agendamento is not null) {
                     return Ok(agendamento);
@@ -42,8 +46,8 @@ namespace ConsultaService.Controllers {
 
             try {
                 agendamento.IdPaciente = id;
-                await agendamentosService.Insert(agendamento);
-                return Ok();
+                await _agendamentoService.Insert(agendamento);
+                return Ok("Agendamento realizado com sucesso!");
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return Problem("Erro interno no servidor", null, 500);

@@ -2,6 +2,7 @@
 using ConsultaService.Models;
 using ConsultaService.Connection;
 using Npgsql;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ConsultaService.Services {
     public class AgendamentosService {
@@ -10,8 +11,9 @@ namespace ConsultaService.Services {
 
         private readonly PgConnection connection;
 
-        public AgendamentosService() {
-            connection = new PgConnection();
+        public AgendamentosService(PgConnection pgConnection) {
+            connection = pgConnection;
+            Console.WriteLine("AgendamentosService Criado!");
         }
 
         public async Task<List<Agendamento>> GetAllFromPaciente(int idPaciente) {
@@ -23,6 +25,7 @@ namespace ConsultaService.Services {
             _sql = $"select * from {NOME_TABELA} where id_paciente={idPaciente}";
 
             try {
+                
                 await using var command = connection.dataSource.CreateCommand(_sql);
                 await using var result  = await command.ExecuteReaderAsync();  
 
@@ -53,10 +56,11 @@ namespace ConsultaService.Services {
 
             _sql = $"select * from {NOME_TABELA} where id={idAgendamento} and id_paciente={idPaciente}";
 
-            await using NpgsqlCommand command = connection.dataSource.CreateCommand(_sql);
-            await using NpgsqlDataReader result  = await command.ExecuteReaderAsync();
-
             try {
+                
+                await using NpgsqlCommand command = connection.dataSource.CreateCommand(_sql);
+                await using NpgsqlDataReader result  = await command.ExecuteReaderAsync();
+
                 if (await result.ReadAsync()) {
                     agendamento = new Agendamento(
                         result.GetFieldValue<int>(0),
