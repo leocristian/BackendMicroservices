@@ -122,5 +122,31 @@ namespace ConsultaService.Services {
             
             return paciente;
         }
+
+        public async Task Update(Paciente paciente) { 
+
+            string _sql = $"update {NOME_TABELA} set nome_completo=$1, email=$2, telefone=$3, data_nascimento=$4, cpf=$5, endereco=$6, numero_sus=$7 " +
+                          "where id=$8";
+
+            try {
+                await using NpgsqlCommand command = new NpgsqlCommand(_sql, await connection.Open()) {
+                    Parameters = {
+                        new() { Value = paciente.NomeCompleto   },
+                        new() { Value = paciente.Email          },
+                        new() { Value = paciente.Telefone       },
+                        new() { Value = paciente.DataNascimento },
+                        new() { Value = paciente.Cpf            },
+                        new() { Value = paciente.Endereco       },
+                        new() { Value = paciente.NumeroSus      },
+                        new() { Value = paciente.Id             }
+                    }
+                };
+
+                await command.ExecuteNonQueryAsync();
+                
+            } catch(NpgsqlException e) {
+                throw new NpgsqlException(e.Message);
+            }
+        }
     }
 }

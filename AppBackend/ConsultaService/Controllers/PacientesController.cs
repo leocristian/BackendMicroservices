@@ -48,5 +48,24 @@ namespace ConsultaService.Controllers {
                 return Problem("Erro interno no servidor", null, 500);
             }            
         }
+
+        [HttpPut]
+        [Route("pacientes/{id}")]
+        public async Task<IActionResult> Put(int id, Paciente paciente) {
+            try {
+
+                paciente.Id = id;
+                
+                if (await _pacientesService.FindById(id) is not null) {
+                    await _pacientesService.Update(paciente);
+                    return Ok("Paciente Atualizado com sucesso!");
+                } else {
+                    return NotFound();
+                }
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return Problem("Erro interno no servidor", null, 500);
+            }
+        }
     }
 }
