@@ -105,5 +105,48 @@ namespace ConsultaService.Services {
                 throw new NpgsqlException(e.Message);
             }
         }
+
+        public async Task Update(Agendamento agendamento) {
+            string _sql = $"update {NOME_TABELA} set descricao=$1, data_hora=$2, id_local=$3, observacoes=$4 " +
+                          "where id_paciente=$5 and id=$6";
+
+            try {
+                await using NpgsqlCommand command = new(_sql, await connection.Open()) {
+                    Parameters = {
+                        new() { Value = agendamento.Descricao   },
+                        new() { Value = agendamento.DataHora    },
+                        new() { Value = agendamento.IdLocal     },
+                        new() { Value = agendamento.Observacoes },
+                        new() { Value = agendamento.IdPaciente  },
+                        new() { Value = agendamento.Id          }
+                    }
+                };
+
+                Console.WriteLine(_sql);
+
+                await command.ExecuteNonQueryAsync();
+                
+            } catch(NpgsqlException e) {
+                throw new NpgsqlException(e.Message);
+            } 
+        }
+
+        public async Task Delete(int idPaciente, int idAgendamento) {
+            string _sql = $"delete from {NOME_TABELA} where id=$1 and id_paciente=$2";
+
+            try {
+                await using NpgsqlCommand command = new(_sql, await connection.Open()) {
+                    Parameters = {
+                        new() { Value = idAgendamento },
+                        new() { Value = idPaciente    }
+                    }
+                };
+
+                await command.ExecuteNonQueryAsync();
+                
+            } catch(NpgsqlException e) {
+                throw new NpgsqlException(e.Message);
+            } 
+        }
     }
 }

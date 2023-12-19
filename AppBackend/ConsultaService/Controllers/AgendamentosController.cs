@@ -53,5 +53,39 @@ namespace ConsultaService.Controllers {
                 return Problem("Erro interno no servidor", null, 500);
             }
         }
+
+        [HttpPut]
+        [Route("pacientes/{idPaciente}/agendamentos/{idAgendamento}")]
+        public async Task<IActionResult> Put(int idAgendamento, Agendamento agendamento) {
+
+            try {
+                if (idAgendamento != agendamento.Id) {
+                    return BadRequest("Requisição Inválida!");
+                } else {
+                    await _agendamentoService.Update(agendamento);
+                    return Ok("Agendamento alterado com sucesso!");
+                }
+            } catch(Exception e) {
+                Console.WriteLine(e.Message);
+                return Problem("Erro interno no servidor", null, 500);
+            }
+        }
+
+        [HttpDelete]
+        [Route("pacientes/{idPaciente}/agendamentos/{idAgendamento}")]
+        public async Task<IActionResult> Delete(int idPaciente, int idAgendamento) {
+
+            try {
+                if (await _agendamentoService.GetById(idPaciente, idAgendamento) is not null) {
+                    await _agendamentoService.Delete(idPaciente, idAgendamento);
+                    return Ok("Agendamento Excluído com Sucesso!");
+                } else {
+                    return NotFound("Agendamento não encontrado!");
+                }
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return Problem("Erro Interno no servidor", null, 500);
+            }
+        }
     }
 }
