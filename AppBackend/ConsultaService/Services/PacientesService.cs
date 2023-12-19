@@ -148,5 +148,22 @@ namespace ConsultaService.Services {
                 throw new NpgsqlException(e.Message);
             }
         }
+
+        public async Task Delete(int id) {
+            string _sql = $"delete from {NOME_TABELA} where id=$1";
+
+            try {
+                await using NpgsqlCommand command = new NpgsqlCommand(_sql, await connection.Open()) {
+                    Parameters = {
+                        new() { Value = id }
+                    }
+                };
+
+                await command.ExecuteNonQueryAsync();
+                
+            } catch(NpgsqlException e) {
+                throw new NpgsqlException(e.Message);
+            }            
+        }
     }
 }

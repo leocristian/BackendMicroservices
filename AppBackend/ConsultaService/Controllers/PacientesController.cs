@@ -55,10 +55,26 @@ namespace ConsultaService.Controllers {
             try {
 
                 paciente.Id = id;
-                
+
                 if (await _pacientesService.FindById(id) is not null) {
                     await _pacientesService.Update(paciente);
                     return Ok("Paciente Atualizado com sucesso!");
+                } else {
+                    return NotFound();
+                }
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return Problem("Erro interno no servidor", null, 500);
+            }
+        }
+
+        [HttpDelete]
+        [Route("pacientes/{id}")]
+        public async Task<IActionResult> Delete(int id) {
+            try {
+                if (await _pacientesService.FindById(id) is not null) {
+                    await _pacientesService.Delete(id);
+                    return Ok("Paciente Excluído com Sucesso!");
                 } else {
                     return NotFound();
                 }

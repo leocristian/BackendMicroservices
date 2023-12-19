@@ -20,8 +20,8 @@ builder.Services.AddScoped<PacientesService>();
 
 // Métodos para registro de dependências
 // AddSingleton - Cria uma única instância para toda a aplicação.
-// AddScoped - Cria uma nova insância a cada requisição, instância fica disponível somente dentro do contexto da solicitação
-// AddTransient - Cria uma nova instância toda vez que o serviço é chamado
+// AddScoped    - Cria uma nova insância a cada requisição, instância fica disponível somente dentro do escopo da solicitação
+// AddTransient - Cria uma nova instância toda vez que o objeto é referenciado
 
 var app = builder.Build();
 
