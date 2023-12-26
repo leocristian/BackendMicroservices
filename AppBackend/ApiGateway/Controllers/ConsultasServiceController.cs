@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using ApiGateway.Models;
 using ApiGateway.Generics;
+using Newtonsoft.Json;
 
 namespace ApiGateway.Controllers {
 
@@ -22,15 +23,15 @@ namespace ApiGateway.Controllers {
         public async Task<IActionResult> GetPacientes() {
 
             try {
+
                 using HttpResponseMessage res = await _client.GetAsync($"pacientes");
 
-                string strJson = await res.Content.ReadAsStringAsync();
-
-                Console.WriteLine(strJson);
-
-                List<Paciente>? pacientes = JsonSerializer.Deserialize<List<Paciente>>(strJson);
-
-                return Ok(strJson);
+                if ((int)res.StatusCode == 200) {
+                    string strJson = await res.Content.ReadAsStringAsync();
+                    return Ok(strJson);   
+                } else {
+                    return StatusCode((int)res.StatusCode);
+                }
             
             } catch (Exception e) {
 
@@ -48,19 +49,41 @@ namespace ApiGateway.Controllers {
             try {
 
                 using HttpResponseMessage res = await _client.GetAsync($"pacientes/{id}");
-                string strJson = await res.Content.ReadAsStringAsync();
-
-                return Ok(strJson);
+                
+                if ((int)res.StatusCode == 200) {
+                    string strJson = await res.Content.ReadAsStringAsync();
+                    return Ok(strJson);   
+                } else {
+                    return StatusCode((int)res.StatusCode);
+                }
             
             } catch(Exception e) {
             
                 Console.WriteLine(e.Message);
+                return _constants.ErroServer;
+            }
+        }
+
+        [HttpPost]
+        [Route("api/consultas/pacientes/novo")]
+        public async Task<IActionResult> Insert(Paciente paciente) {
+
+            try {
             
+                string pacienteStr = JsonConvert.SerializeObject(paciente);
+                Console.WriteLine(pacienteStr);
+                using HttpResponseMessage res = await _client.PostAsync($"pacientes/novo", new StringContent(pacienteStr));
+
+                return Ok();
+
+            } catch (Exception e) {
+
+                Console.WriteLine(e.Message);
                 return _constants.ErroServer;
             }
         }
         
-        [HttpPut]
+        [HttpPut]      
         [Route("api/consultas/pacientes/{id}")]
         public async Task<IActionResult> Update(int id, Paciente paciente) {
 
@@ -73,18 +96,20 @@ namespace ApiGateway.Controllers {
         [Route("api/consultas/pacientes/{id}")]
         public async Task<IActionResult> Delete(int id) {
 
-            await Task.Delay(100);
-            
-            return Ok();
-        }
+            try {
+                
+                using HttpResponseMessage res = await _client.DeleteAsync($"pacientes/{id}");
 
-        [HttpPost]
-        [Route("api/consultas/pacientes/{id}")]
-        public async Task<IActionResult> Insert(int id, Paciente paciente) {
+                if ((int)res.StatusCode == 200) {
+                    return Ok();
+                } else {
+                    return StatusCode((int)res.StatusCode);
+                }
 
-            await Task.Delay(100);
-            
-            return Ok();
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return _constants.ErroServer;
+            }
         }
     }
 }

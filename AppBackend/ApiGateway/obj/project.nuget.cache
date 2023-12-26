@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "pJ+2AV5qxqKGU7lEARuUBYoHEPGktxFJHjED57tntDehXBNJr6Y2qIgDM3PmqUyW+KFDH2s9k3tZhrincUFtPg==",
+  "dgSpecHash": "ID8xq9diTB0YbF0SircFXomks9IlDc4UHtyvCyHORwjp/2dn4UKMRpaxC7ict0mXasVTALU5ZR17qfBFePgyqA==",
   "success": true,
   "projectFilePath": "C:\\Users\\leonardo\\Desktop\\github\\BackendMicroservices\\AppBackend\\ApiGateway\\ApiGateway.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\leonardo\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
     "C:\\Users\\leonardo\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
     "C:\\Users\\leonardo\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.17.0\\microsoft.visualstudio.azure.containers.tools.targets.1.17.0.nupkg.sha512",
+    "C:\\Users\\leonardo\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\leonardo\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
     "C:\\Users\\leonardo\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
     "C:\\Users\\leonardo\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
