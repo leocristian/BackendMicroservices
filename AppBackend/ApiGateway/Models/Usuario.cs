@@ -1,5 +1,5 @@
 
-namespace EnfermeiroService.Models {
+namespace ApiGateway.Models {
     public class Usuario {
         public int Id { get; set; }
         public string Cpf { get; set; }

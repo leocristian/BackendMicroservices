@@ -13,7 +13,6 @@ namespace EnfermeiroService.Services {
         public UsuarioService(PgConnection pgConnection, IConfiguration config) {
             connection = pgConnection;
             semente = config["DataBase:Semente"];
-            Console.WriteLine(semente);
         }
 
         public async Task<Usuario?> ReadByLogin(string username, string senha) {
@@ -31,9 +30,10 @@ namespace EnfermeiroService.Services {
                         result.GetFieldValue<string>(2),
                         result.GetFieldValue<string>(3),
                         result.GetFieldValue<string>(4),
-                        result.GetFieldValue<DateOnly>(5),
+                        result.GetFieldValue<string>(5),
                         result.GetFieldValue<string>(6),
-                        ""
+                        "",
+                        result.GetFieldValue<int>(7)
                     );
                 } else {
                     usuario = null;
@@ -47,8 +47,8 @@ namespace EnfermeiroService.Services {
         public async Task SignUp(Usuario usuario) {
             
             
-            string _sql = $"insert into {NOME_TABELA} (cpf, telefone, nome_completo, coren, data_nascimento, nome_login, senha) " +
-                           "values ($1, $2, $3, $4, $5, $6, crypt($7, gen_salt('md5')))";
+            string _sql = $"insert into {NOME_TABELA} (cpf, telefone, nome_completo, coren, data_nascimento, nome_login, senha, grupo) " +
+                           "values ($1, $2, $3, $4, $5, $6, crypt($7, gen_salt('md5')), $8)";
                                                      
             try {
                 await using NpgsqlCommand command = new(_sql, await connection.Open()) {
@@ -59,7 +59,8 @@ namespace EnfermeiroService.Services {
                         new() { Value = usuario.Coren },
                         new() { Value = usuario.DataNascimento },
                         new() { Value = usuario.Login },
-                        new() { Value = usuario.Senha+semente }
+                        new() { Value = usuario.Senha+semente },
+                        new() { Value = usuario.Grupo }
                     }
                 };
 

@@ -16,6 +16,7 @@ namespace EnfermeiroService.Controllers {
         [HttpPost]
         [Route("enfermeiro/login")]
         public async Task<IActionResult> Login(string username, string senha) {
+
             Usuario? usuario;
 
             try {

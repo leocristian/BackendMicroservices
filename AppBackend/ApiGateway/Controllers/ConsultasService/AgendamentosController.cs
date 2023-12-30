@@ -7,24 +7,24 @@ using Newtonsoft.Json;
 namespace ApiGateway.Controllers {
 
     [ApiController]
-    public class ConsultasServiceController : ControllerBase {
+    public class AgendamentosController : ControllerBase {
 
         public HttpClient _client;
 
         public Constants _constants;
 
-        public ConsultasServiceController(Constants constants) {
-            _client = new HttpClient() { BaseAddress = new Uri("http://localhost:5092/") };
+        public AgendamentosController(Constants constants, HttpClient client) {
+            _client = client;
             _constants = constants;
         }
 
         [HttpGet]
-        [Route("api/consultas/pacientes")]
-        public async Task<IActionResult> GetPacientes() {
+        [Route("api/consultas/pacientes/{id}/agendamentos")]
+        public async Task<IActionResult> Getagendamentos(int id) {
 
             try {
 
-                using HttpResponseMessage res = await _client.GetAsync($"pacientes");
+                using HttpResponseMessage res = await _client.GetAsync($"pacientes/{id}/agendamentos");
 
                 if ((int)res.StatusCode == 200) {
                     string strJson = await res.Content.ReadAsStringAsync();
@@ -43,12 +43,12 @@ namespace ApiGateway.Controllers {
         } 
 
         [HttpGet]
-        [Route("api/consultas/pacientes/{id}")]
-        public async Task<IActionResult> GetPacienteById(int id) {
+        [Route("api/consultas/pacientes/{idPaciente}/agendamentos/{idAgendamento}")]
+        public async Task<IActionResult> GetPacienteById(int idPaciente, int idAgendamento) {
 
             try {
 
-                using HttpResponseMessage res = await _client.GetAsync($"pacientes/{id}");
+                using HttpResponseMessage res = await _client.GetAsync($"pacientes/{idPaciente}/agendamentos/{idAgendamento}");
                 
                 if ((int)res.StatusCode == 200) {
                     string strJson = await res.Content.ReadAsStringAsync();
@@ -58,58 +58,43 @@ namespace ApiGateway.Controllers {
                 }
             
             } catch(Exception e) {
-            
-                Console.WriteLine(e.Message);
-                return _constants.ErroServer;
-            }
-        }
-
-        [HttpPost]
-        [Route("api/consultas/pacientes/novo")]
-        public async Task<IActionResult> Insert(Paciente paciente) {
-
-            try {
-            
-                string pacienteStr = JsonConvert.SerializeObject(paciente);
-                Console.WriteLine(pacienteStr);
-                using HttpResponseMessage res = await _client.PostAsync($"pacientes/novo", new StringContent(pacienteStr));
-
-                return Ok();
-
-            } catch (Exception e) {
-
                 Console.WriteLine(e.Message);
                 return _constants.ErroServer;
             }
         }
         
-        [HttpPut]      
-        [Route("api/consultas/pacientes/{id}")]
-        public async Task<IActionResult> Update(int id, Paciente paciente) {
-
-            await Task.Delay(100);
-
-            return Ok();
-        }
-
-        [HttpDelete]
-        [Route("api/consultas/pacientes/{id}")]
-        public async Task<IActionResult> Delete(int id) {
+        [HttpPost]
+        [Route("api/consultas/pacientes/{id}/agendamentos/novo")]
+        public async Task<IActionResult> Insert(int id, Agendamento agendamento) {
 
             try {
                 
-                using HttpResponseMessage res = await _client.DeleteAsync($"pacientes/{id}");
+                string agendamentoStr = JsonConvert.SerializeObject(agendamento);
+                Console.WriteLine(agendamentoStr);
+                using HttpResponseMessage res = await _client.PostAsync($"pacientes/{id}/agendamentos/novo", new StringContent(agendamentoStr));
 
-                if ((int)res.StatusCode == 200) {
-                    return Ok();
-                } else {
-                    return StatusCode((int)res.StatusCode);
-                }
+                return StatusCode((int)res.StatusCode);
 
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return _constants.ErroServer;
             }
+        }
+
+
+        [HttpDelete]
+        [Route("api/consultas/pacientes/{idPaciente}/agendamentos/{idAgendamento}")]
+        public async Task<IActionResult> Delete(int idPaciente, int idAgendamento) {
+
+            try {
+                
+                using HttpResponseMessage res = await _client.DeleteAsync($"pacientes/{idPaciente}/agendamentos/{idAgendamento}");
+                return StatusCode((int)res.StatusCode);
+
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return _constants.ErroServer;
+            }         
         }
     }
 }

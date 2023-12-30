@@ -11,6 +11,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<Constants>();
 
+builder.Services.AddSingleton(new HttpClient() { BaseAddress = new Uri("http://localhost:5092/") }); 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -42,3 +42,4 @@ c:\Users\leonardo\Desktop\github\BackendMicroservices\AppBackend\EnfermeiroServi
 c:\Users\leonardo\Desktop\github\BackendMicroservices\AppBackend\EnfermeiroService\bin\Debug\net6.0\xunit.assert.dll
 c:\Users\leonardo\Desktop\github\BackendMicroservices\AppBackend\EnfermeiroService\bin\Debug\net6.0\xunit.core.dll
 c:\Users\leonardo\Desktop\github\BackendMicroservices\AppBackend\EnfermeiroService\bin\Debug\net6.0\xunit.execution.dotnet.dll
+C:\Users\leonardo\Desktop\github\BackendMicroservices\AppBackend\EnfermeiroService\bin\Debug\net6.0\System.Security.Permissions.dll

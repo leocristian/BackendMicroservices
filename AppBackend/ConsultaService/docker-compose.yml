@@ -1,12 +1,12 @@
 services:
   consultaserviceDB: 
-    image: postgres:latest
+    image: postgres:16
     container_name: pgcontainer
     restart: always
-    volumes: 
-      - ./Database/scripts.sql:/docker-entrypoint-initdb.d/scripts.sql
     environment: 
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: ConsultaServiceDB
+      POSTGRES_DB: consultaservicedb
     ports:
       - 5435:5432
+    volumes:
+      - ./dbdata:/var/lib/postgresql

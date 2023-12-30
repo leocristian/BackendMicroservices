@@ -47,9 +47,9 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+            "Microsoft.AspNetCore.Authentication": {
               "target": "Package",
-              "version": "[1.17.0, )"
+              "version": "[2.2.0, )"
             },
             "Npgsql": {
               "target": "Package",

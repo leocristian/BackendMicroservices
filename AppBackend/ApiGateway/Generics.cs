@@ -6,7 +6,6 @@ namespace ApiGateway.Generics {
         public ObjectResult ErroServer { get; }
 
         public Constants() {
-            Console.WriteLine("Constants Criado!");
             ErroServer = Problem("Erro interno no servidor!", null, 500);
         }
     }
