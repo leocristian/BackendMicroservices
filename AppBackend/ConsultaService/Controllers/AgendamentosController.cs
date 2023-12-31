@@ -18,7 +18,6 @@ namespace ConsultaService.Controllers {
         public async Task<IActionResult> GetAllFromPaciente(int id) {
 
             List<Agendamento> agendamentos = await _agendamentoService.GetAllFromPaciente(id); 
-
             return Ok(agendamentos);
         }
 

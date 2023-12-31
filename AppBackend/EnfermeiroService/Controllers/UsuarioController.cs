@@ -13,6 +13,18 @@ namespace EnfermeiroService.Controllers {
             _usuarioService = usuarioService;
         }
 
+        [HttpGet]
+        [Route("enfermeiro/index")]
+        public async Task<IActionResult> Index() {
+            try {
+                List<Usuario> usuarios = await _usuarioService.GetAll();
+                return Ok(usuarios);    
+            } catch(Exception e) {
+                Console.WriteLine(e.Message);
+                return Problem("Erro interno no servidor", null, 500);
+            }
+        } 
+
         [HttpPost]
         [Route("enfermeiro/login")]
         public async Task<IActionResult> Login(string username, string senha) {
@@ -30,13 +42,14 @@ namespace EnfermeiroService.Controllers {
                 Console.WriteLine(e.Message);
                 return Problem("Erro interno no servidor!", null, 500);
             }
-        }
+        }   
 
         [HttpPost]
         [Route("enfemeiro/novo")]
         public async Task<IActionResult?> SignUp(Usuario usuario) {
             try {
                 await _usuarioService.SignUp(usuario);
+                Console.WriteLine("entrou signup");
                 return Ok("Usuário cadastrado com sucesso!");
             } catch (Exception e) {
                 Console.WriteLine(e.Message);

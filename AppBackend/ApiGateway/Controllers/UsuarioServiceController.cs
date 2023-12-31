@@ -17,6 +17,26 @@ namespace ApiGateway {
             _constants = constants;
         }
 
+        [HttpGet]
+        [Route("api/usuario/index")]
+        public async Task<IActionResult> Index() {
+            try {
+                
+                using HttpResponseMessage res = await _client.GetAsync("enfermeiro/index"); 
+                
+                if ((int)res.StatusCode == 200) {
+                    string strJson = await res.Content.ReadAsStringAsync();
+                    return Ok(strJson);   
+                } else {
+                    return StatusCode((int)res.StatusCode);
+                }
+
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return _constants.ErroServer;
+            }
+        }
+
         [HttpPost]
         [Route("api/usuario/login")]
         public async Task<IActionResult> Login(Usuario usuario) {
