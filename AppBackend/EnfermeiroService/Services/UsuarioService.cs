@@ -47,12 +47,16 @@ namespace EnfermeiroService.Services {
 
         public async Task<Usuario?> ReadByLogin(string username, string senha) {
             Usuario? usuario;
-            string _sql = $"select * from enfermeiros where nome_login='{username}' and senha = crypt('{senha+semente}', senha)";
+            string _sql = $"select id, nome_completo, cpf, telefone, coren, nome_login, grupo "+
+                           "from enfermeiros where nome_login='{username}' limit 1"; //and senha = crypt('{senha+semente}', senha)
 
             await using NpgsqlCommand command   = connection.dataSource.CreateCommand(_sql);
             await using NpgsqlDataReader result = await command.ExecuteReaderAsync();
 
             try {
+
+                Console.WriteLine("entrou login");
+
                 if (await result.ReadAsync()) {
                     usuario = new Usuario(
                         result.GetFieldValue<int>(0),

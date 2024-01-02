@@ -11,7 +11,6 @@ namespace ConsultaService.Services {
 
         public PacientesService(PgConnection pgConnection) {
             connection = pgConnection;
-            Console.WriteLine("PacientesService Criado!");
         }
     
         public async Task<List<Paciente>> GetAll() {
@@ -30,7 +29,7 @@ namespace ConsultaService.Services {
                         result.GetFieldValue<string>(1),
                         result.GetFieldValue<string>(2),
                         result.GetFieldValue<string>(3),
-                        result.GetFieldValue<DateOnly>(4),
+                        result.GetFieldValue<DateTime>(4),
                         result.GetFieldValue<string>(5),
                         result.GetFieldValue<string>(6),
                         result.GetFieldValue<string>(7)
@@ -50,6 +49,7 @@ namespace ConsultaService.Services {
                           "values ($1, $2, $3, $4, $5, $6, $7)";
 
             try {
+                
                 await using NpgsqlCommand command = new NpgsqlCommand(_sql, await connection.Open()) {
                     Parameters = {
                         new() { Value = paciente.NomeCompleto },
@@ -63,6 +63,8 @@ namespace ConsultaService.Services {
                 };
 
                 await command.ExecuteNonQueryAsync();
+
+                Console.WriteLine("Inseriu novo paciente!");
                 
             } catch(NpgsqlException e) {
                 throw new NpgsqlException(e.Message);
@@ -84,7 +86,7 @@ namespace ConsultaService.Services {
                     result.GetFieldValue<string>(1),
                     result.GetFieldValue<string>(2),
                     result.GetFieldValue<string>(3),
-                    result.GetFieldValue<DateOnly>(4),
+                    result.GetFieldValue<DateTime>(4),
                     result.GetFieldValue<string>(5),
                     result.GetFieldValue<string>(6),
                     result.GetFieldValue<string>(7)
@@ -111,7 +113,7 @@ namespace ConsultaService.Services {
                     result.GetFieldValue<string>(1),
                     result.GetFieldValue<string>(2),
                     result.GetFieldValue<string>(3),
-                    result.GetFieldValue<DateOnly>(4),
+                    result.GetFieldValue<DateTime>(4),
                     result.GetFieldValue<string>(5),
                     result.GetFieldValue<string>(6),
                     result.GetFieldValue<string>(7)
@@ -143,6 +145,8 @@ namespace ConsultaService.Services {
                 };
 
                 await command.ExecuteNonQueryAsync();
+
+                Console.WriteLine("Atualizou paciente!");
                 
             } catch(NpgsqlException e) {
                 throw new NpgsqlException(e.Message);
@@ -160,6 +164,8 @@ namespace ConsultaService.Services {
                 };
 
                 await command.ExecuteNonQueryAsync();
+
+                Console.WriteLine("Deletou Paciente!");
                 
             } catch(NpgsqlException e) {
                 throw new NpgsqlException(e.Message);

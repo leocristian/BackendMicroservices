@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ID8xq9diTB0YbF0SircFXomks9IlDc4UHtyvCyHORwjp/2dn4UKMRpaxC7ict0mXasVTALU5ZR17qfBFePgyqA==",
+  "dgSpecHash": "aBjMpKey0lGhiEFocKH88cYi/hnRUyju+sHXO6WwzELU35NoUtvHdvjsAWyH6U98pQR9iSRIHR+Oc+bwaK+cDA==",
   "success": true,
   "projectFilePath": "C:\\Users\\leonardo\\Desktop\\github\\BackendMicroservices\\AppBackend\\ApiGateway\\ApiGateway.csproj",
   "expectedPackageFiles": [
@@ -11,7 +11,10 @@
     "C:\\Users\\leonardo\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
     "C:\\Users\\leonardo\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
     "C:\\Users\\leonardo\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
-    "C:\\Users\\leonardo\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.2.3\\swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512"
+    "C:\\Users\\leonardo\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.2.3\\swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512",
+    "C:\\Users\\leonardo\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+    "C:\\Users\\leonardo\\.nuget\\packages\\system.text.encodings.web\\8.0.0\\system.text.encodings.web.8.0.0.nupkg.sha512",
+    "C:\\Users\\leonardo\\.nuget\\packages\\system.text.json\\8.0.0\\system.text.json.8.0.0.nupkg.sha512"
   ],
   "logs": []
 }

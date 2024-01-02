@@ -3,7 +3,6 @@ using System.Text.Json;
 using ApiGateway.Models;
 using ApiGateway.Generics;
 using Newtonsoft.Json;
-
 namespace ApiGateway.Controllers {
 
     [ApiController]
@@ -67,15 +66,17 @@ namespace ApiGateway.Controllers {
         public async Task<IActionResult> Insert(Paciente paciente) {
 
             try {
-            
-                string pacienteStr = JsonConvert.SerializeObject(paciente);
-                Console.WriteLine(pacienteStr);
-                using HttpResponseMessage res = await _client.PostAsync($"pacientes/novo", new StringContent(pacienteStr));
 
-                return StatusCode((int)res.StatusCode);
+                string pacienteStr = JsonConvert.SerializeObject(paciente);
+                using HttpResponseMessage res = await _client.PostAsJsonAsync<Paciente>($"pacientes/novo", paciente);
+
+                if ((int)res.StatusCode == 200) {
+                    return Ok("Paciente Inserido com Sucesso!");
+                } else {
+                    return StatusCode((int)res.StatusCode);
+                }    
 
             } catch (Exception e) {
-
                 Console.WriteLine(e.Message);
                 return _constants.ErroServer;
             }
@@ -85,9 +86,20 @@ namespace ApiGateway.Controllers {
         [Route("api/consultas/pacientes/{id}")]
         public async Task<IActionResult> Update(int id, Paciente paciente) {
 
-            await Task.Delay(100);
+            try {
+                string pacienteStr = JsonConvert.SerializeObject(paciente);
+                using HttpResponseMessage res = await _client.PutAsJsonAsync<Paciente>($"pacientes/{id}", paciente);
 
-            return Ok();
+                if ((int)res.StatusCode == 200) {
+                    return Ok("Paciente Atualizado com Sucesso!");
+                } else {
+                    return StatusCode((int)res.StatusCode);
+                }    
+
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return _constants.ErroServer;
+            }
         }
 
         [HttpDelete]
@@ -97,7 +109,12 @@ namespace ApiGateway.Controllers {
             try {
                 
                 using HttpResponseMessage res = await _client.DeleteAsync($"pacientes/{id}");
-                return StatusCode((int)res.StatusCode);
+
+                if ((int)res.StatusCode == 200) {
+                    return Ok("Paciente Deletado com Sucesso!");
+                } else {
+                    return StatusCode((int)res.StatusCode);
+                } 
 
             } catch (Exception e) {
                 Console.WriteLine(e.Message);

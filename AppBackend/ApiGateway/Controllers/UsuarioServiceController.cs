@@ -46,8 +46,8 @@ namespace ApiGateway {
 
                 Console.WriteLine(loginStr);
 
-                using HttpResponseMessage res = await _client.PostAsync($"enfermeiro/login", new StringContent(loginStr));
-                return Ok(res.Content);
+                using HttpResponseMessage res = await _client.PostAsJsonAsync<Usuario>($"enfermeiro/login", usuario);
+                return StatusCode((int)res.StatusCode);
 
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
@@ -64,8 +64,11 @@ namespace ApiGateway {
 
                 Console.WriteLine(usuarioStr);
 
-                using HttpResponseMessage res = await _client.PostAsync($"enfermeiro/novo", new StringContent(usuarioStr));
-                return StatusCode((int)res.StatusCode);
+                using HttpResponseMessage res = await _client.PostAsJsonAsync<Usuario>($"enfermeiro/novo", usuario);
+
+                Console.WriteLine(_client.BaseAddress);
+
+                return StatusCode((int)res.StatusCode); 
 
             } catch (Exception e) {
                 Console.WriteLine(e.Message);

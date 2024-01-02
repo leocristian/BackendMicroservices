@@ -13,7 +13,6 @@ namespace ConsultaService.Services {
 
         public AgendamentosService(PgConnection pgConnection) {
             connection = pgConnection;
-            Console.WriteLine("AgendamentosService Criado!");
         }
 
         public async Task<List<Agendamento>> GetAllFromPaciente(int idPaciente) {
@@ -22,7 +21,8 @@ namespace ConsultaService.Services {
 
             string _sql = "";
 
-            _sql = $"select * from {NOME_TABELA} where id_paciente={idPaciente}";
+            _sql = $"select id, id_paciente, id_enfermeiro, descricao, data_consulta, hora_consulta, id_local, observacoes "+
+                   $"from {NOME_TABELA} where id_paciente={idPaciente}";
 
             try {
                 
@@ -35,9 +35,10 @@ namespace ConsultaService.Services {
                         result.GetFieldValue<int>(1),
                         result.GetFieldValue<int>(2),
                         result.GetFieldValue<string>(3),
-                        result.GetFieldValue<DateTime>(4),
-                        result.GetFieldValue<int>(5),
-                        result.GetFieldValue<string>(6)                       
+                        result.GetFieldValue<DateOnly>(4),
+                        result.GetFieldValue<TimeOnly>(5),
+                        result.GetFieldValue<int>(6),
+                        result.GetFieldValue<string>(7)                       
                     ));
                 }
 
@@ -54,7 +55,8 @@ namespace ConsultaService.Services {
 
             string _sql = "";
 
-            _sql = $"select * from {NOME_TABELA} where id={idAgendamento} and id_paciente={idPaciente}";
+            _sql = $"select id, id_paciente, id_enfermeiro, descricao, data_consulta, hora_consulta, id_local, observacoes "+
+                   $"from {NOME_TABELA} where id={idAgendamento} and id_paciente={idPaciente}";
 
             try {
                 
@@ -67,9 +69,10 @@ namespace ConsultaService.Services {
                         result.GetFieldValue<int>(1),
                         result.GetFieldValue<int>(2),
                         result.GetFieldValue<string>(3),
-                        result.GetFieldValue<DateTime>(4),
-                        result.GetFieldValue<int>(5),
-                        result.GetFieldValue<string>(6)
+                        result.GetFieldValue<DateOnly>(4),
+                        result.GetFieldValue<TimeOnly>(5),
+                        result.GetFieldValue<int>(6),
+                        result.GetFieldValue<string>(7)
 
                     );
                 } else {
@@ -84,8 +87,8 @@ namespace ConsultaService.Services {
 
         public async Task Insert(Agendamento agendamento) {
 
-            string _sql = $"insert into {NOME_TABELA}(id_paciente, id_enfermeiro, descricao, data_hora, id_local, observacoes) " +
-                          "values ($1, $2, $3, $4, $5, $6)";
+            string _sql = $"insert into {NOME_TABELA}(id_paciente, id_enfermeiro, descricao, data_consulta, hora_consulta, id_local, observacoes) " +
+                          "values ($1, $2, $3, $4, $5, $6, $7)";
 
             try {
                 await using NpgsqlCommand command = new NpgsqlCommand(_sql, await connection.Open()) {
@@ -93,7 +96,8 @@ namespace ConsultaService.Services {
                         new() { Value = agendamento.IdPaciente   },
                         new() { Value = agendamento.IdEnfermeiro },
                         new() { Value = agendamento.Descricao    },
-                        new() { Value = agendamento.DataHora     },
+                        new() { Value = agendamento.Data         },
+                        new() { Value = agendamento.Hora         },
                         new() { Value = agendamento.IdLocal      },
                         new() { Value = agendamento.Observacoes  }
                     }
@@ -114,7 +118,8 @@ namespace ConsultaService.Services {
                 await using NpgsqlCommand command = new(_sql, await connection.Open()) {
                     Parameters = {
                         new() { Value = agendamento.Descricao   },
-                        new() { Value = agendamento.DataHora    },
+                        new() { Value = agendamento.Data        },
+                        new() { Value = agendamento.Hora        },
                         new() { Value = agendamento.IdLocal     },
                         new() { Value = agendamento.Observacoes },
                         new() { Value = agendamento.IdPaciente  },

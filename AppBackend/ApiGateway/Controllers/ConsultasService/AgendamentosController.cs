@@ -2,7 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using ApiGateway.Models;
 using ApiGateway.Generics;
-using Newtonsoft.Json;
+// using Newtonsoft.Json;
+// using System.Text.Json;
 
 namespace ApiGateway.Controllers {
 
@@ -20,7 +21,7 @@ namespace ApiGateway.Controllers {
 
         [HttpGet]
         [Route("api/consultas/pacientes/{id}/agendamentos")]
-        public async Task<IActionResult> Getagendamentos(int id) {
+        public async Task<IActionResult> GetAgendamentos(int id) {
 
             try {
 
@@ -44,7 +45,7 @@ namespace ApiGateway.Controllers {
 
         [HttpGet]
         [Route("api/consultas/pacientes/{idPaciente}/agendamentos/{idAgendamento}")]
-        public async Task<IActionResult> GetPacienteById(int idPaciente, int idAgendamento) {
+        public async Task<IActionResult> GetAgendamentosById(int idPaciente, int idAgendamento) {
 
             try {
 
@@ -68,12 +69,18 @@ namespace ApiGateway.Controllers {
         public async Task<IActionResult> Insert(int id, Agendamento agendamento) {
 
             try {
-                
-                string agendamentoStr = JsonConvert.SerializeObject(agendamento);
-                Console.WriteLine(agendamentoStr);
-                using HttpResponseMessage res = await _client.PostAsync($"pacientes/{id}/agendamentos/novo", new StringContent(agendamentoStr));
 
-                return StatusCode((int)res.StatusCode);
+                string agendamentoStr = JsonSerializer.Serialize(agendamento);
+
+                Console.WriteLine(agendamentoStr);
+
+                using HttpResponseMessage res = await _client.PostAsJsonAsync<Agendamento>($"pacientes/{id}/agendamentos/novo", agendamento);
+
+                if ((int)res.StatusCode == 200) {
+                    return Ok("Agendamento realizado com sucesso!");
+                } else {
+                    return StatusCode((int)res.StatusCode);
+                }
 
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
@@ -89,7 +96,11 @@ namespace ApiGateway.Controllers {
             try {
                 
                 using HttpResponseMessage res = await _client.DeleteAsync($"pacientes/{idPaciente}/agendamentos/{idAgendamento}");
-                return StatusCode((int)res.StatusCode);
+                if ((int)res.StatusCode == 200) {
+                    return Ok("Agendamento excluído com sucesso!");
+                } else {
+                    return StatusCode((int)res.StatusCode);
+                }
 
             } catch (Exception e) {
                 Console.WriteLine(e.Message);

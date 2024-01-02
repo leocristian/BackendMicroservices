@@ -58,7 +58,7 @@ namespace ConsultaService.Controllers {
 
                 if (await _pacientesService.FindById(id) is not null) {
                     await _pacientesService.Update(paciente);
-                    return Ok("Paciente Atualizado com sucesso!");
+                    return Ok();
                 } else {
                     return NotFound();
                 }
@@ -74,7 +74,7 @@ namespace ConsultaService.Controllers {
             try {
                 if (await _pacientesService.FindById(id) is not null) {
                     await _pacientesService.Delete(id);
-                    return Ok("Paciente Excluído com Sucesso!");
+                    return Ok();
                 } else {
                     return NotFound();
                 }
