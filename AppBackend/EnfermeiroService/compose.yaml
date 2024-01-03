@@ -1,0 +1,11 @@
+services:
+  pgdatabase:
+    image: postgres:16
+    container_name: enfermeiro_server
+    ports:
+        - "5433:5432"
+    volumes:
+        - "./Database/pg_data:/var/lib/postgresql/data"
+    environment:
+        POSTGRES_PASSWORD: admin
+      

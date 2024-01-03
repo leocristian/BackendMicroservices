@@ -13,7 +13,7 @@ namespace ApiGateway {
         public Constants _constants;
 
         public UsuarioServiceController(Constants constants) {
-            _client = new HttpClient() { BaseAddress = new Uri("http://localhost:5091/") };
+            _client    = new HttpClient() { BaseAddress = new Uri("http://localhost:5091/") };
             _constants = constants;
         }
 
@@ -61,13 +61,7 @@ namespace ApiGateway {
             try {
                 
                 string usuarioStr = JsonConvert.SerializeObject(usuario);
-
-                Console.WriteLine(usuarioStr);
-
                 using HttpResponseMessage res = await _client.PostAsJsonAsync<Usuario>($"enfermeiro/novo", usuario);
-
-                Console.WriteLine(_client.BaseAddress);
-
                 return StatusCode((int)res.StatusCode); 
 
             } catch (Exception e) {

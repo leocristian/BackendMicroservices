@@ -1,0 +1,11 @@
+services:
+  pgdatabase:
+    image: postgres:16
+    container_name: consulta_server
+    ports:
+        - "5432:5432"
+    volumes:
+        - "./Database/pg_data:/var/lib/postgresql/data"
+    environment:
+        POSTGRES_PASSWORD: admin
+      
