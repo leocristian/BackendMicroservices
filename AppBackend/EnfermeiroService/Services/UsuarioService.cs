@@ -54,9 +54,6 @@ namespace EnfermeiroService.Services {
             await using NpgsqlDataReader result = await command.ExecuteReaderAsync();
 
             try {
-
-                Console.WriteLine("entrou login");
-
                 if (await result.ReadAsync()) {
                     usuario = new Usuario(
                         result.GetFieldValue<int>(0),
@@ -97,6 +94,7 @@ namespace EnfermeiroService.Services {
                 };
 
                 await command.ExecuteNonQueryAsync();
+                Console.WriteLine("Inseriu Novo Usuário!");
 
             } catch (NpgsqlException e) {
                 throw new NpgsqlException(e.Message);

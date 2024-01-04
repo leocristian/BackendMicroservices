@@ -30,8 +30,6 @@ namespace EnfermeiroService.Controllers {
         public async Task<IActionResult> Login(Usuario usuario) {
 
             try {
-
-                Console.WriteLine(usuario.Login);
                 Usuario? enfermeiro = await _usuarioService.ReadByLogin(usuario.Login, usuario.Senha);
                 if (enfermeiro is not null) {
                     return Ok(enfermeiro);
@@ -45,7 +43,7 @@ namespace EnfermeiroService.Controllers {
         }   
 
         [HttpPost]
-        [Route("enfemeiro/novo")]
+        [Route("enfermeiro/novo")]
         public async Task<IActionResult> SignUp(Usuario usuario) {
             try {
                 await _usuarioService.SignUp(usuario);

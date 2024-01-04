@@ -62,7 +62,12 @@ namespace ApiGateway {
                 
                 string usuarioStr = JsonConvert.SerializeObject(usuario);
                 using HttpResponseMessage res = await _client.PostAsJsonAsync<Usuario>($"enfermeiro/novo", usuario);
-                return StatusCode((int)res.StatusCode); 
+
+                if ((int)res.StatusCode == 200) {
+                    return Ok("Usuário Inserido com Sucesso!");
+                } else {
+                    return StatusCode((int)res.StatusCode);
+                }
 
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
