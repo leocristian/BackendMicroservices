@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using ApiGateway.Models;
 using ApiGateway.Generics;
-using Newtonsoft.Json;
 namespace ApiGateway.Controllers {
 
     [ApiController]
@@ -67,7 +66,7 @@ namespace ApiGateway.Controllers {
 
             try {
 
-                string pacienteStr = JsonConvert.SerializeObject(paciente);
+                string pacienteStr = JsonSerializer.Serialize<Paciente>(paciente);
                 using HttpResponseMessage res = await _client.PostAsJsonAsync<Paciente>($"pacientes/novo", paciente);
 
                 if ((int)res.StatusCode == 200) {
@@ -87,7 +86,7 @@ namespace ApiGateway.Controllers {
         public async Task<IActionResult> Update(int id, Paciente paciente) {
 
             try {
-                string pacienteStr = JsonConvert.SerializeObject(paciente);
+                string pacienteStr = JsonSerializer.Serialize<Paciente>(paciente);
                 using HttpResponseMessage res = await _client.PutAsJsonAsync<Paciente>($"pacientes/{id}", paciente);
 
                 if ((int)res.StatusCode == 200) {

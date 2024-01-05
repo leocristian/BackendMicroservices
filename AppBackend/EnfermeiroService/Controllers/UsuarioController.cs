@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using EnfermeiroService.Services;
 using EnfermeiroService.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EnfermeiroService.Controllers {
     
@@ -27,10 +28,10 @@ namespace EnfermeiroService.Controllers {
 
         [HttpPost]
         [Route("enfermeiro/login")]
-        public async Task<IActionResult> Login(Usuario usuario) {
+        public async Task<IActionResult> Login(LoginInfo loginInfo) {
 
             try {
-                Usuario? enfermeiro = await _usuarioService.ReadByLogin(usuario.Login, usuario.Senha);
+                Usuario? enfermeiro = await _usuarioService.ReadByLogin(loginInfo.NomeUsuario, loginInfo.Senha);
                 if (enfermeiro is not null) {
                     return Ok(enfermeiro);
                 } else {

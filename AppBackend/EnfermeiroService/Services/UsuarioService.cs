@@ -1,7 +1,6 @@
 using EnfermeiroService.Models;
 using EnfermeiroService.Connection;
 using Npgsql;
-using dotenv.net;
 
 namespace EnfermeiroService.Services {
     public class UsuarioService {
@@ -12,11 +11,11 @@ namespace EnfermeiroService.Services {
 
         public UsuarioService(PgConnection pgConnection, IConfiguration config) {
             connection = pgConnection;
-            semente = config["DataBase:Semente"];
+            semente = config["DataBase:Semente"]!;
         }
 
         public async Task<List<Usuario>> GetAll() {
-            List<Usuario> usuarios = new();
+            List<Usuario> usuarios = [];
             
             string _sql = $"select * from {NOME_TABELA}";
 
@@ -48,7 +47,7 @@ namespace EnfermeiroService.Services {
         public async Task<Usuario?> ReadByLogin(string username, string senha) {
             Usuario? usuario;
             string _sql = $"select id, nome_completo, cpf, telefone, coren, nome_login, grupo "+
-                           "from enfermeiros where nome_login='{username}' limit 1"; //and senha = crypt('{senha+semente}', senha)
+                          $"from enfermeiros where nome_login='{username}' and senha = crypt('{senha+semente}', senha)";
 
             await using NpgsqlCommand command   = connection.dataSource.CreateCommand(_sql);
             await using NpgsqlDataReader result = await command.ExecuteReaderAsync();
