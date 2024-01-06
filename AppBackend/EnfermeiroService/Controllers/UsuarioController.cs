@@ -32,11 +32,13 @@ namespace EnfermeiroService.Controllers {
 
             try {
                 Usuario? enfermeiro = await _usuarioService.ReadByLogin(loginInfo.NomeUsuario, loginInfo.Senha);
-                if (enfermeiro is not null) {
-                    return Ok(enfermeiro);
-                } else {
-                    return NotFound();
-                }
+
+                return Ok(enfermeiro);
+                // if (enfermeiro is not null) {
+                //     return Ok(enfermeiro);
+                // } else {
+                //     return NotFound();
+                // }
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return Problem("Erro interno no servidor!", null, 500);

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using ApiGateway.Models;
 using ApiGateway.Generics;
+using Microsoft.AspNetCore.Authorization;
 namespace ApiGateway.Controllers {
 
     [ApiController]
@@ -17,6 +18,7 @@ namespace ApiGateway.Controllers {
         }
 
         [HttpGet]
+        [Authorize(Policy = "Enfermeiros")]
         [Route("api/consultas/pacientes")]
         public async Task<IActionResult> GetPacientes() {
 
@@ -39,6 +41,7 @@ namespace ApiGateway.Controllers {
         } 
 
         [HttpGet]
+        [Authorize(Policy = "Enfermeiros")]
         [Route("api/consultas/pacientes/{id}")]
         public async Task<IActionResult> GetPacienteById(int id) {
 
@@ -61,6 +64,7 @@ namespace ApiGateway.Controllers {
         }
 
         [HttpPost]
+        [Authorize(Policy = "Enfermeiros")]
         [Route("api/consultas/pacientes/novo")]
         public async Task<IActionResult> Insert(Paciente paciente) {
 
@@ -81,7 +85,8 @@ namespace ApiGateway.Controllers {
             }
         }
         
-        [HttpPut]      
+        [HttpPut]   
+        [Authorize(Policy = "Enfermeiros")]   
         [Route("api/consultas/pacientes/{id}")]
         public async Task<IActionResult> Update(int id, Paciente paciente) {
 
@@ -102,6 +107,7 @@ namespace ApiGateway.Controllers {
         }
 
         [HttpDelete]
+        [Authorize(Policy = "Enfermeiros")]
         [Route("api/consultas/pacientes/{id}")]
         public async Task<IActionResult> Delete(int id) {
 

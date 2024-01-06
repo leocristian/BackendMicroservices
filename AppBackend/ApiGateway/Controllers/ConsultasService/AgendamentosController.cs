@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using ApiGateway.Models;
 using ApiGateway.Generics;
+using Microsoft.AspNetCore.Authorization;
 // using Newtonsoft.Json;
 // using System.Text.Json;
 
@@ -20,6 +21,7 @@ namespace ApiGateway.Controllers {
         }
 
         [HttpGet]
+        [Authorize(Policy = "Enfermeiros")]
         [Route("api/consultas/pacientes/{id}/agendamentos")]
         public async Task<IActionResult> GetAgendamentos(int id) {
 
@@ -44,6 +46,7 @@ namespace ApiGateway.Controllers {
         } 
 
         [HttpGet]
+        [Authorize(Policy = "Enfermeiros")]
         [Route("api/consultas/pacientes/{idPaciente}/agendamentos/{idAgendamento}")]
         public async Task<IActionResult> GetAgendamentosById(int idPaciente, int idAgendamento) {
 
@@ -65,6 +68,7 @@ namespace ApiGateway.Controllers {
         }
         
         [HttpPost]
+        [Authorize(Policy = "Medicos")]
         [Route("api/consultas/pacientes/{id}/agendamentos/novo")]
         public async Task<IActionResult> Insert(int id, Agendamento agendamento) {
 
@@ -90,6 +94,7 @@ namespace ApiGateway.Controllers {
 
 
         [HttpDelete]
+        [Authorize(Policy = "Medicos")]
         [Route("api/consultas/pacientes/{idPaciente}/agendamentos/{idAgendamento}")]
         public async Task<IActionResult> Delete(int idPaciente, int idAgendamento) {
 

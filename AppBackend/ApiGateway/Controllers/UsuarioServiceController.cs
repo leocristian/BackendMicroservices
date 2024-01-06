@@ -7,6 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using ApiGateway.Services;
+using Newtonsoft.Json;
 // using Newtonsoft.Json;
 
 namespace ApiGateway {
@@ -15,23 +17,23 @@ namespace ApiGateway {
     public class UsuarioServiceController : ControllerBase {
 
         public HttpClient _client;
-
         public Constants _constants;
-
         public IConfiguration _config;
+        public TokenService _tokenService;
 
-        public UsuarioServiceController(Constants constants, IConfiguration config) {
+        public UsuarioServiceController(Constants constants, IConfiguration config, TokenService tokenService) {
             _client    = new HttpClient() { BaseAddress = new Uri("http://localhost:5091/") };
             _constants = constants;
             _config    = config;
+            _tokenService = tokenService;
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = "Enfermeiros")]
         [Route("api/usuario/index")]
         public async Task<IActionResult> Index() {
             try {
-                
+            
                 using HttpResponseMessage res = await _client.GetAsync("enfermeiro/index"); 
                 
                 if ((int)res.StatusCode == 200) {
@@ -46,15 +48,24 @@ namespace ApiGateway {
                 return _constants.ErroServer;
             }
         }
+        
+        [HttpGet]
+        [Authorize(Policy = "Medicos")]
+        [Route("api/usuario/indexTest")]
+        public string IndexTest() {
+            return "medicos";   
+        }
+
+
 
         [HttpPost]
         [Route("api/usuario/login")]
         public async Task<IActionResult> Login(LoginInfo loginInfo) {
             try {
 
-                string loginStr = JsonSerializer.Serialize<LoginInfo>(loginInfo);
+                // string loginStr = JsonSerializer.Serialize<LoginInfo>(loginInfo);
 
-                Console.WriteLine(loginStr);
+                // Console.WriteLine(loginStr);
 
                 using HttpResponseMessage res = await _client.PostAsJsonAsync<LoginInfo>($"enfermeiro/login", loginInfo);
                 return StatusCode((int)res.StatusCode);
@@ -70,7 +81,7 @@ namespace ApiGateway {
         public async Task<IActionResult> Insert(Usuario usuario) {
             try {
                 
-                string usuarioStr = JsonSerializer.Serialize<Usuario>(usuario);
+                // string usuarioStr = JsonSerializer.Serialize<Usuario>(usuario);
                 using HttpResponseMessage res = await _client.PostAsJsonAsync<Usuario>($"enfermeiro/novo", usuario);
 
                 if ((int)res.StatusCode == 200) {
@@ -86,38 +97,21 @@ namespace ApiGateway {
         }
 
         [HttpPost]
-        [Route("api/usuario/gerartoken")]
+        [Route("api/usuario/autenticar")]
         public async Task<IActionResult> GerarToken(LoginInfo loginInfo) {
 
             using HttpResponseMessage res = await _client.PostAsJsonAsync<LoginInfo>($"enfermeiro/login", loginInfo);
 
-            if ((int)res.StatusCode == 200) {
-                var issuer = _config["Jwt:Issuer"];
-                var audience = _config["Jwt:Audience"];
-                var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"]!);
-                var tokenDescriptor = new SecurityTokenDescriptor {
-                    Subject = new ClaimsIdentity(new[]
-                    {
-                        new Claim("Id", Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Sub, loginInfo.NomeUsuario),
-                        new Claim(JwtRegisteredClaimNames.Email, loginInfo.Senha),
-                        new Claim(JwtRegisteredClaimNames.Jti,
-                        Guid.NewGuid().ToString())
-                    }),
-                    Expires = DateTime.UtcNow.AddMinutes(5),
-                    Issuer = issuer,
-                    Audience = audience,
-                    SigningCredentials = new SigningCredentials
-                    (new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha512Signature)
-                };
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var jwtToken = tokenHandler.WriteToken(token);
-                var stringToken = tokenHandler.WriteToken(token);
-                return Ok(stringToken);
+            string usuarioStr = await res.Content.ReadAsStringAsync();
+
+            Usuario? usuario = JsonConvert.DeserializeObject<Usuario>(usuarioStr);
+        
+            if (usuario is not null) {    
+                var token = _tokenService.GerarToken(usuario!);
+                return Ok(new { usuario, token });
+            } else {
+                return NotFound("Usuário ou senha inválidos!");
             }
-            return Unauthorized();
         }
     }
 }
