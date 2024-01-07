@@ -57,19 +57,16 @@ builder.Services.AddAuthentication(options => {
 }).AddJwtBearer(o => {
     o.TokenValidationParameters  = new TokenValidationParameters {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("ivannaivannaivannaivannaivannaivannaivannaivannaivannaivannaivannaivanna")),
-        ValidateIssuer   = false,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("ivannaivannaivannaivannaivannaivannaivannaivannaivannaivannaivannaivanna")), 
         ValidateAudience = false,
-        ValidateLifetime = true,
+        ValidateIssuer   = false,
+        ValidateLifetime = true
     };
 });
 
-builder.Services.AddAuthorization(op => {
-
-    op.AddPolicy("Enfermeiros", policy => policy.RequireClaim("Grupo", "0"));
-    op.AddPolicy("Medicos",     policy => policy.RequireClaim("Grupo", "1"));
-
-});
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("Enfermeiros", policy => policy.RequireClaim("Grupo", "0"))
+    .AddPolicy("Medicos", policy => policy.RequireClaim("Grupo", "1"));
 
 var app = builder.Build();
 

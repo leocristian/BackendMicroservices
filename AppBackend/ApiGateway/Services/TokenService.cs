@@ -6,7 +6,9 @@ using ApiGateway.Models;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ApiGateway.Services {
-    public class TokenService {
+    public class TokenService(IConfiguration config) {
+
+        private readonly IConfiguration _config = config;
 
         public string GerarToken(Usuario usuario) {
 

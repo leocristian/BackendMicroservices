@@ -56,11 +56,9 @@ namespace ApiGateway {
             return "medicos";   
         }
 
-
-
         [HttpPost]
         [Route("api/usuario/login")]
-        public async Task<IActionResult> Login(LoginInfo loginInfo) {
+        public async Task<IActionResult> Login([FromBody] LoginInfo loginInfo) {
             try {
 
                 // string loginStr = JsonSerializer.Serialize<LoginInfo>(loginInfo);
@@ -78,7 +76,7 @@ namespace ApiGateway {
 
         [HttpPost]
         [Route("api/usuario/novo")]
-        public async Task<IActionResult> Insert(Usuario usuario) {
+        public async Task<IActionResult> Insert([FromBody] Usuario usuario) {
             try {
                 
                 // string usuarioStr = JsonSerializer.Serialize<Usuario>(usuario);
@@ -100,17 +98,22 @@ namespace ApiGateway {
         [Route("api/usuario/autenticar")]
         public async Task<IActionResult> GerarToken(LoginInfo loginInfo) {
 
-            using HttpResponseMessage res = await _client.PostAsJsonAsync<LoginInfo>($"enfermeiro/login", loginInfo);
+            try {
+                using HttpResponseMessage res = await _client.PostAsJsonAsync<LoginInfo>($"enfermeiro/login", loginInfo);
 
-            string usuarioStr = await res.Content.ReadAsStringAsync();
+                string usuarioStr = await res.Content.ReadAsStringAsync();
 
-            Usuario? usuario = JsonConvert.DeserializeObject<Usuario>(usuarioStr);
-        
-            if (usuario is not null) {    
-                var token = _tokenService.GerarToken(usuario!);
-                return Ok(new { usuario, token });
-            } else {
-                return NotFound("Usuário ou senha inválidos!");
+                Usuario? usuario = JsonConvert.DeserializeObject<Usuario>(usuarioStr);
+            
+                if (usuario is not null) {
+                    var token = _tokenService.GerarToken(usuario);
+                    return Ok(new { usuario, token });
+                } else {
+                    return NotFound("Usuário ou senha inválidos!");
+                }
+            } catch(Exception e) {
+                Console.WriteLine(e.Message);
+                return _constants.ErroServer;
             }
         }
     }
