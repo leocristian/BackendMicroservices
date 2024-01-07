@@ -6,19 +6,13 @@ using Microsoft.AspNetCore.Authorization;
 namespace ApiGateway.Controllers {
 
     [ApiController]
-    public class PacientesController : ControllerBase {
+    public class PacientesController(Constants constants, HttpClient client) : ControllerBase {
 
-        public HttpClient _client;
-
-        public Constants _constants;
-
-        public PacientesController(Constants constants, HttpClient client) {
-            _client = client;
-            _constants = constants;
-        }
+        public HttpClient _client = client;
+        public Constants _constants = constants;
 
         [HttpGet]
-        [Authorize(Policy = "Enfermeiros")]
+        [Authorize(Policy = "Usuarios")]
         [Route("api/consultas/pacientes")]
         public async Task<IActionResult> GetPacientes() {
 
@@ -41,7 +35,7 @@ namespace ApiGateway.Controllers {
         } 
 
         [HttpGet]
-        [Authorize(Policy = "Enfermeiros")]
+        [Authorize(Policy = "Usuarios")]
         [Route("api/consultas/pacientes/{id}")]
         public async Task<IActionResult> GetPacienteById(string id) {
 
@@ -64,7 +58,7 @@ namespace ApiGateway.Controllers {
         }
 
         [HttpPost]
-        [Authorize(Policy = "Enfermeiros")]
+        [Authorize(Policy = "Usuarios")]
         [Route("api/consultas/pacientes/novo")]
         public async Task<IActionResult> Insert([FromBody] Paciente paciente) {
 

@@ -131,7 +131,7 @@ namespace ConsultaService.Services {
                           "where id=$8";
 
             try {
-                await using NpgsqlCommand command = new NpgsqlCommand(_sql, await connection.Open()) {
+                await using NpgsqlCommand command = new(_sql, await connection.Open()) {
                     Parameters = {
                         new() { Value = paciente.NomeCompleto   },
                         new() { Value = paciente.Email          },
@@ -171,5 +171,25 @@ namespace ConsultaService.Services {
                 throw new NpgsqlException(e.Message);
             }            
         }
-    }
+
+        public async Task DeleteAgendamentosFromPaciente(int idPaciente) {
+            
+            string _sql = "delete from agendamentos where id_paciente=@p1";
+
+            try {
+                await using NpgsqlCommand command = new NpgsqlCommand(_sql, await connection.Open()) {
+                Parameters = {
+                        new("p1", idPaciente)
+                }
+            };
+
+            await command.ExecuteNonQueryAsync();
+
+            Console.WriteLine($"Deletou agendamentos do paciente {idPaciente}");
+
+            } catch(NpgsqlException e) {
+                throw new NpgsqlException(e.Message);
+            }
+        }
+	}
 }

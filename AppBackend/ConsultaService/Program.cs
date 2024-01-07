@@ -11,7 +11,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Ler string de conexão 
-string ConnectionString = builder.Configuration["DataBase:ConnString"];
+string ConnectionString = builder.Configuration["DataBase:ConnString"] 
+?? throw new Exception("DataBase:ConnString não configurada!");
 
 builder.Services.AddSingleton(new PgConnection(ConnectionString));
 

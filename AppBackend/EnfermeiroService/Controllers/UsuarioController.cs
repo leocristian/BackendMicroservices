@@ -57,5 +57,43 @@ namespace EnfermeiroService.Controllers {
                 return Problem("Erro interno no servidor!", null, 500);
             }
         }
+
+        [HttpPut]
+        [Route("enfermeiro/{id}")]
+        public async Task<IActionResult> Put(int id, Usuario usuario) {
+            try {
+                
+                usuario.Id = id;
+
+                if (await _usuarioService.FindById(id) is not null) {
+                    
+                    await _usuarioService.Update(usuario);
+                    Usuario? usuarioUpdated = await _usuarioService.FindById(id)!;
+
+                    return Ok(usuarioUpdated);
+                } else {
+                    return NotFound();
+                }
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return Problem("Erro interno no servidor!", null, 500);
+            }
+        }
+
+        [HttpDelete]
+        [Route("enfermeiro/{id}")]
+        public async Task<IActionResult> Delete(int id) {
+            try {
+                if (await _usuarioService.FindById(id) is not null) {
+                    await _usuarioService.Delete(id);
+                    return Ok();
+                } else {
+                    return NotFound();
+                }
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return Problem("Erro interno no servidor!", null, 500);
+            }
+        }
     }
 }

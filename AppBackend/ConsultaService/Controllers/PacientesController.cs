@@ -57,8 +57,12 @@ namespace ConsultaService.Controllers {
                 paciente.Id = id;
 
                 if (await _pacientesService.FindById(id) is not null) {
+                   
                     await _pacientesService.Update(paciente);
-                    return Ok();
+                    Paciente? pacienteUpdated = await _pacientesService.FindById(id)!;
+
+                    return Ok(pacienteUpdated);
+                
                 } else {
                     return NotFound();
                 }
@@ -73,7 +77,10 @@ namespace ConsultaService.Controllers {
         public async Task<IActionResult> Delete(int id) {
             try {
                 if (await _pacientesService.FindById(id) is not null) {
+			
+		            await _pacientesService.DeleteAgendamentosFromPaciente(id);	
                     await _pacientesService.Delete(id);
+
                     return Ok();
                 } else {
                     return NotFound();

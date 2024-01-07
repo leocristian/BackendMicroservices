@@ -50,29 +50,10 @@ namespace ApiGateway {
         }
 
         [HttpPost]
-        [Route("api/usuario/login")]
-        public async Task<IActionResult> Login([FromBody] LoginInfo loginInfo) {
-            try {
-
-                // string loginStr = JsonSerializer.Serialize<LoginInfo>(loginInfo);
-
-                // Console.WriteLine(loginStr);
-
-                using HttpResponseMessage res = await _client.PostAsJsonAsync<LoginInfo>($"enfermeiro/login", loginInfo);
-                return StatusCode((int)res.StatusCode);
-
-            } catch (Exception e) {
-                Console.WriteLine(e.Message);
-                return _constants.ErroServer;
-            }
-        }
-
-        [HttpPost]
         [Route("api/usuario/novo")]
         public async Task<IActionResult> Insert([FromBody] Usuario usuario) {
             try {
                 
-                // string usuarioStr = JsonSerializer.Serialize<Usuario>(usuario);
                 using HttpResponseMessage res = await _client.PostAsJsonAsync<Usuario>($"enfermeiro/novo", usuario);
 
                 if ((int)res.StatusCode == 200) {
@@ -89,7 +70,7 @@ namespace ApiGateway {
 
         [HttpPost]
         [Route("api/usuario/autenticar")]
-        public async Task<IActionResult> GerarToken(LoginInfo loginInfo) {
+        public async Task<IActionResult> Autenticar(LoginInfo loginInfo) {
 
             try {
                 using HttpResponseMessage res = await _client.PostAsJsonAsync<LoginInfo>($"enfermeiro/login", loginInfo);
@@ -105,6 +86,46 @@ namespace ApiGateway {
                     return NotFound("Usuário ou senha inválidos!");
                 }
             } catch(Exception e) {
+                Console.WriteLine(e.Message);
+                return _constants.ErroServer;
+            }
+        }
+
+        [HttpPut]
+        [Authorize(Policy = "Usuarios")]
+        [Route("api/usuario/{id}")]
+        public async Task<IActionResult> Put(string id, Usuario usuario) {
+            try {
+                using HttpResponseMessage res = await _client.PutAsJsonAsync<Usuario>($"enfermeiro/{id}", usuario);
+            
+                if ((int)res.StatusCode == 200) {
+                    return StatusCode(200,  JsonConvert.DeserializeObject<Usuario>(await res.Content.ReadAsStringAsync()));
+                } else {
+                    return StatusCode((int)res.StatusCode);
+                }
+
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return _constants.ErroServer;
+            }
+        }
+        
+        [HttpDelete]
+        [Authorize(Policy = "Usuarios")]
+        [Route("api/usuario/{id}")]
+        public async Task<IActionResult> Delete(int id) {
+
+            try {
+                
+                using HttpResponseMessage res = await _client.DeleteAsync($"enfermeiro/{id}");
+
+                if ((int)res.StatusCode == 200) {
+                    return Ok("Usuário Deletado com Sucesso!");
+                } else {
+                    return StatusCode((int)res.StatusCode);
+                } 
+
+            } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return _constants.ErroServer;
             }

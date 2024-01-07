@@ -9,19 +9,13 @@ using Microsoft.AspNetCore.Authorization;
 namespace ApiGateway.Controllers {
 
     [ApiController]
-    public class AgendamentosController : ControllerBase {
+    public class AgendamentosController(Constants constants, HttpClient client) : ControllerBase {
 
-        public HttpClient _client;
-
-        public Constants _constants;
-
-        public AgendamentosController(Constants constants, HttpClient client) {
-            _client = client;
-            _constants = constants;
-        }
+        public HttpClient _client   = client;
+        public Constants _constants = constants;
 
         [HttpGet]
-        [Authorize(Policy = "Enfermeiros")]
+        [Authorize(Policy = "Usuarios")]
         [Route("api/consultas/pacientes/{id}/agendamentos")]
         public async Task<IActionResult> GetAgendamentos(int id) {
 
@@ -46,7 +40,7 @@ namespace ApiGateway.Controllers {
         } 
 
         [HttpGet]
-        [Authorize(Policy = "Enfermeiros")]
+        [Authorize(Policy = "Usuarios")]
         [Route("api/consultas/pacientes/{idPaciente}/agendamentos/{idAgendamento}")]
         public async Task<IActionResult> GetAgendamentosById(int idPaciente, int idAgendamento) {
 
