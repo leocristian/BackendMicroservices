@@ -1,15 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using ApiGateway.Models;
 using ApiGateway.Generics;
-using System.Text.Json;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using ApiGateway.Services;
 using Newtonsoft.Json;
-// using Newtonsoft.Json;
 
 namespace ApiGateway {
 
