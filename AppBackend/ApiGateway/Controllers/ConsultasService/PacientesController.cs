@@ -58,7 +58,7 @@ namespace ApiGateway.Controllers {
         }
 
         [HttpPost]
-        [Authorize(Policy = "Usuarios")]
+        [Authorize(Policy = "Enfermeiros")]
         [Route("api/consultas/pacientes/novo")]
         public async Task<IActionResult> Insert([FromBody] Paciente paciente) {
 
