@@ -43,7 +43,7 @@ namespace ApiGateway.Controllers {
         [HttpGet]
         [Authorize(Policy = "Enfermeiros")]
         [Route("api/consultas/pacientes/{id}")]
-        public async Task<IActionResult> GetPacienteById([FromQuery] int id) {
+        public async Task<IActionResult> GetPacienteById(string id) {
 
             try {
 
@@ -88,7 +88,7 @@ namespace ApiGateway.Controllers {
         [HttpPut]   
         [Authorize(Policy = "Enfermeiros")]   
         [Route("api/consultas/pacientes/{id}")]
-        public async Task<IActionResult> Update([FromQuery] int id, [FromBody] Paciente paciente) {
+        public async Task<IActionResult> Update(int id, [FromBody] Paciente paciente) {
 
             try {
                 string pacienteStr = JsonSerializer.Serialize<Paciente>(paciente);
@@ -105,11 +105,11 @@ namespace ApiGateway.Controllers {
                 return _constants.ErroServer;
             }
         }
- 
+
         [HttpDelete]
         [Authorize(Policy = "Enfermeiros")]
         [Route("api/consultas/pacientes/{id}")]
-        public async Task<IActionResult> Delete([FromQuery] int id) {
+        public async Task<IActionResult> Delete(int id) {
 
             try {
                 

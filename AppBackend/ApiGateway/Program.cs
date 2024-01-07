@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ApiGateway.Services;
 using Microsoft.OpenApi.Models;
+using System.ComponentModel;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,43 +13,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(
-c =>
-    {
-        c.SwaggerDoc("v1", new OpenApiInfo { Title = "APIGateway", Version = "v1" });
-        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-        {
-            Description =
-                "JWT Authorization Header - utilizado com Bearer Authentication.\r\n\r\n" +
-                "Digite 'Bearer' [espaço] e então seu token no campo abaixo.\r\n\r\n" +
-                "Exemplo (informar sem as aspas): 'Bearer 12345abcdef'",
-            Name = "Authorization",
-            In = ParameterLocation.Header,
-            Type = SecuritySchemeType.ApiKey,
-            Scheme = "Bearer",
-            BearerFormat = "JWT",
-        });
-        c.AddSecurityRequirement(new OpenApiSecurityRequirement
-        {
-            {
-                new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    }
-                },
-                Array.Empty<string>()
-            }
-        });
-    }
-);
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<Constants>();
 
 builder.Services.AddSingleton(new HttpClient() { BaseAddress = new Uri("http://localhost:5092/") }); 
-builder.Services.AddSingleton<TokenService>();
+
+string key = builder.Configuration["Settings:JwtKey"] ?? throw new Exception("Settings:JwtKey não configurada!");
+
+byte[] encodedKey = Encoding.ASCII.GetBytes(key);
+
+builder.Services.AddSingleton(new TokenService(encodedKey));
 
 builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -57,7 +32,7 @@ builder.Services.AddAuthentication(options => {
 }).AddJwtBearer(o => {
     o.TokenValidationParameters  = new TokenValidationParameters {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("ivannaivannaivannaivannaivannaivannaivannaivannaivannaivannaivannaivanna")), 
+        IssuerSigningKey = new SymmetricSecurityKey(encodedKey), 
         ValidateAudience = false,
         ValidateIssuer   = false,
         ValidateLifetime = true
@@ -66,7 +41,8 @@ builder.Services.AddAuthentication(options => {
 
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("Enfermeiros", policy => policy.RequireClaim("Grupo", "0"))
-    .AddPolicy("Medicos", policy => policy.RequireClaim("Grupo", "1"));
+    .AddPolicy("Medicos",     policy => policy.RequireClaim("Grupo", "1"))
+    .AddPolicy("Usuarios",    policy => policy.RequireClaim("Grupo", "0", "1"));
 
 var app = builder.Build();
 

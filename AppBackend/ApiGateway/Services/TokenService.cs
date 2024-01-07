@@ -6,19 +6,17 @@ using ApiGateway.Models;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ApiGateway.Services {
-    public class TokenService(IConfiguration config) {
+    public class TokenService(byte[] key) {
 
-        private readonly IConfiguration _config = config;
+        private readonly byte[] Key = key;
 
         public string GerarToken(Usuario usuario) {
-
-            var key = Encoding.ASCII.GetBytes("ivannaivannaivannaivannaivannaivannaivannaivannaivannaivannaivannaivanna");
             
             JwtSecurityTokenHandler tokenHandler = new();
             SecurityTokenDescriptor tokenDescriptor = new() {
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature
+                    new SymmetricSecurityKey(Key), SecurityAlgorithms.HmacSha256Signature
                 ),
                 Subject = new ClaimsIdentity(new[] {
                         new Claim("Login", usuario.Login),

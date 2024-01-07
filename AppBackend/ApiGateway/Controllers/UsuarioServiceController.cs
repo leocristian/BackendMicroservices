@@ -29,7 +29,7 @@ namespace ApiGateway {
         }
 
         [HttpGet]
-        [Authorize(Policy = "Enfermeiros")]
+        [Authorize(Policy = "Usuarios")]
         [Route("api/usuario/index")]
         public async Task<IActionResult> Index() {
             try {
@@ -47,13 +47,6 @@ namespace ApiGateway {
                 Console.WriteLine(e.Message);
                 return _constants.ErroServer;
             }
-        }
-        
-        [HttpGet]
-        [Authorize(Policy = "Medicos")]
-        [Route("api/usuario/indexTest")]
-        public string IndexTest() {
-            return "medicos";   
         }
 
         [HttpPost]
