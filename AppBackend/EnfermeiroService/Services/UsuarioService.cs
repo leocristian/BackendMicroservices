@@ -44,11 +44,41 @@ namespace EnfermeiroService.Services {
             return usuarios;
         }
 
-        public async Task<Usuario?> ReadByLogin(string username, string senha) {
+        public async Task<Usuario?> ReadByLoginInfo(string username, string senha) {
             Usuario? usuario;
             string _sql = $"select id, nome_completo, cpf, telefone, coren, nome_login, grupo "+
                           $"from enfermeiros where nome_login='{username}' and senha = crypt('{senha+semente}', senha)";
 
+            await using NpgsqlCommand command   = connection.dataSource.CreateCommand(_sql);
+            await using NpgsqlDataReader result = await command.ExecuteReaderAsync();
+
+            try {
+                if (await result.ReadAsync()) {
+                    usuario = new Usuario(
+                        result.GetFieldValue<int>(0),
+                        result.GetFieldValue<string>(1),
+                        result.GetFieldValue<string>(2),
+                        result.GetFieldValue<string>(3),
+                        result.GetFieldValue<string>(4),
+                        result.GetFieldValue<string>(5),
+                        "",
+                        result.GetFieldValue<int>(6)
+                    );
+                } else {
+                    usuario = null;
+                }
+            } catch (NpgsqlException e) {
+                throw new NpgsqlException(e.Message);
+            }
+            return usuario;
+        }
+
+        public async Task<Usuario?> ReadByLogin(string username) {
+            Usuario? usuario;
+            string _sql = $"select id, nome_completo, cpf, telefone, coren, nome_login, grupo "+
+                          $"from enfermeiros where nome_login='{username}'";
+
+            Console.WriteLine(_sql);
             await using NpgsqlCommand command   = connection.dataSource.CreateCommand(_sql);
             await using NpgsqlDataReader result = await command.ExecuteReaderAsync();
 

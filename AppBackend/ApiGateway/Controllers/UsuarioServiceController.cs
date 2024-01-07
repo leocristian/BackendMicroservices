@@ -78,7 +78,7 @@ namespace ApiGateway {
                 if ((int)res.StatusCode == 200) {
                     return Ok("Usuário Inserido com Sucesso!");
                 } else {
-                    return StatusCode((int)res.StatusCode);
+                    return StatusCode((int)res.StatusCode, await res.Content.ReadAsStringAsync());
                 }
 
             } catch (Exception e) {

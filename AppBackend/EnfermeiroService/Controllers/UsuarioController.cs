@@ -31,14 +31,10 @@ namespace EnfermeiroService.Controllers {
         public async Task<IActionResult> Login(LoginInfo loginInfo) {
 
             try {
-                Usuario? enfermeiro = await _usuarioService.ReadByLogin(loginInfo.NomeUsuario, loginInfo.Senha);
 
+                Usuario? enfermeiro = await _usuarioService.ReadByLoginInfo(loginInfo.NomeUsuario, loginInfo.Senha);
                 return Ok(enfermeiro);
-                // if (enfermeiro is not null) {
-                //     return Ok(enfermeiro);
-                // } else {
-                //     return NotFound();
-                // }
+
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return Problem("Erro interno no servidor!", null, 500);
@@ -49,8 +45,13 @@ namespace EnfermeiroService.Controllers {
         [Route("enfermeiro/novo")]
         public async Task<IActionResult> SignUp(Usuario usuario) {
             try {
-                await _usuarioService.SignUp(usuario);
-                return Ok();
+                
+                if (await _usuarioService.ReadByLogin(usuario.Login) is not null) {
+                    return Problem("Já existe um usuário com este login!", null, 409);
+                }else {
+                    await _usuarioService.SignUp(usuario);
+                    return Ok();
+                }
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return Problem("Erro interno no servidor!", null, 500);
