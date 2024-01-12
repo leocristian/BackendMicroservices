@@ -1,5 +1,6 @@
 ﻿using Npgsql;
-using dotenv.net;
+using Dapper;
+using System.Data.Common;
 
 namespace ConsultaService.Connection {
     public class PgConnection {
@@ -8,6 +9,7 @@ namespace ConsultaService.Connection {
 
         public PgConnection(string ConnString) {
             dataSource = NpgsqlDataSource.Create(ConnString);
+            
             Console.WriteLine("Conexao criada!");
         }
 
