@@ -17,7 +17,7 @@ namespace ConsultaService.Controllers {
         [Route("pacientes/{id}/agendamentos")]
         public async Task<IActionResult> GetAllFromPaciente(int id) {
 
-            List<Agendamento> agendamentos = await _agendamentoService.GetAllFromPaciente(id); 
+            IEnumerable<Agendamento> agendamentos = await _agendamentoService.GetAllFromPaciente(id); 
             return Ok(agendamentos);
         }
 

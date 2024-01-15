@@ -1,6 +1,6 @@
 ﻿using Npgsql;
 using Dapper;
-using System.Data.Common;
+using System.Data;
 
 namespace ConsultaService.Connection {
     public class PgConnection {
@@ -18,3 +18,4 @@ namespace ConsultaService.Connection {
         }
     }
 }
+

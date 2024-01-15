@@ -17,8 +17,8 @@ namespace ConsultaService.Controllers {
         [Route("pacientes")]
         public async Task<IActionResult> Get() {
             try {
-                List<Paciente> pacientes = await _pacientesService.GetAll();
-                return Ok(pacientes);    
+                IEnumerable<Paciente> pacientes = await _pacientesService.GetAll();
+                return Ok(pacientes);
             } catch(Exception e) {
                 Console.WriteLine(e.Message);
                 return Problem("Erro interno no servidor", null, 500);

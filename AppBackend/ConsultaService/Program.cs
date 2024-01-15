@@ -1,5 +1,6 @@
 using ConsultaService.Connection;
 using ConsultaService.Services;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,10 @@ string ConnectionString = builder.Configuration["DataBase:ConnString"]
 ?? throw new Exception("DataBase:ConnString não configurada!");
 
 builder.Services.AddSingleton(new PgConnection(ConnectionString));
+
+builder.Services.AddSingleton(new NpgsqlConnection(ConnectionString));
+
+builder.Services.AddSingleton(ConnectionString);
 
 builder.Services.AddScoped<AgendamentosService>();
 builder.Services.AddScoped<PacientesService>();
