@@ -1,5 +1,4 @@
 ﻿using ConsultaService.Models;
-using ConsultaService.Connection;
 using Npgsql;
 using System.Data;
 using Dapper;
@@ -10,12 +9,9 @@ namespace ConsultaService.Services {
 
         private readonly string NOME_TABELA = "pacientes";
 
-        private readonly PgConnection connection;
-
         private readonly NpgsqlConnection conn;
 
-        public PacientesService(PgConnection pgConnection, NpgsqlConnection Conn) {
-            connection = pgConnection;
+        public PacientesService(NpgsqlConnection Conn) {
             conn = Conn;
         }
     
@@ -103,7 +99,8 @@ namespace ConsultaService.Services {
                     paciente.DataNascimento,
                     paciente.Cpf,
                     paciente.Endereco,
-                    paciente.NumeroSus
+                    paciente.NumeroSus,
+                    paciente.Id
                 };
 
                 if (await conn.ExecuteAsync(_sql, parametros) > 0) {

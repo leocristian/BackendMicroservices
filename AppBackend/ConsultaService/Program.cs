@@ -1,4 +1,3 @@
-using ConsultaService.Connection;
 using ConsultaService.Services;
 using Npgsql;
 
@@ -14,8 +13,6 @@ builder.Services.AddSwaggerGen();
 // Ler string de conexão 
 string ConnectionString = builder.Configuration["DataBase:ConnString"] 
 ?? throw new Exception("DataBase:ConnString não configurada!");
-
-builder.Services.AddSingleton(new PgConnection(ConnectionString));
 
 builder.Services.AddSingleton(new NpgsqlConnection(ConnectionString));
 

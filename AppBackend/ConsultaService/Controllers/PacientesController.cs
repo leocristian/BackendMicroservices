@@ -14,7 +14,7 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpGet]
-        [Route("pacientes")]
+        [Route("pacientes/index")]
         public async Task<IActionResult> Get() {
             try {
                 IEnumerable<Paciente> pacientes = await _pacientesService.GetAll();
@@ -26,8 +26,8 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpGet]
-        [Route("pacientes/{id}")]
-        public async Task<IActionResult> GetById(int id) {
+        [Route("pacientes")]
+        public async Task<IActionResult> GetById([FromQuery] int id) {
             Paciente? paciente = await _pacientesService.FindById(id);;
 
             if (paciente is null) {

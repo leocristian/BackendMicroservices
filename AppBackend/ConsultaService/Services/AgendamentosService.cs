@@ -1,6 +1,5 @@
 ﻿
 using ConsultaService.Models;
-using ConsultaService.Connection;
 using Npgsql;
 using Dapper;
 
@@ -9,12 +8,9 @@ namespace ConsultaService.Services {
 
         private readonly string NOME_TABELA = "agendamentos";
 
-        private readonly PgConnection connection;
-
         private readonly NpgsqlConnection conn;
 
-        public AgendamentosService(PgConnection pgConnection, NpgsqlConnection Conn) {
-            connection = pgConnection;
+        public AgendamentosService(NpgsqlConnection Conn) {
             conn = Conn;
         }
 
@@ -22,8 +18,8 @@ namespace ConsultaService.Services {
 
             IEnumerable<Agendamento> agendamentos = [];
 
-            string _sql = "select id, id_paciente, id_enfermeiro, descricao, data_consulta, hora_consulta, id_local, observacoes "+
-                          $"from {NOME_TABELA} where id_paciente=@idPaciente";
+            string _sql = "select id, idpaciente, idenfermeiro, descricao, dataconsulta, horaconsulta, idlocal, observacoes "+
+                          $"from {NOME_TABELA} where idpaciente=@idPaciente";
             
             try {
                 
@@ -42,8 +38,8 @@ namespace ConsultaService.Services {
 
             Agendamento? agendamento;
 
-            string _sql = "select id, id_paciente, id_enfermeiro, descricao, data_consulta, hora_consulta, id_local, observacoes "+
-                          $"from {NOME_TABELA} where id=@idAgendamento and id_paciente=@idPaciente";
+            string _sql = "select id, idpaciente, idenfermeiro, descricao, dataconsulta, horaconsulta, idlocal, observacoes "+
+                          $"from {NOME_TABELA} where id=@idAgendamento and idpaciente=@idPaciente";
 
             try {
 
@@ -60,7 +56,7 @@ namespace ConsultaService.Services {
 
         public async Task Insert(Agendamento agendamento) {
 
-            string _sql = $"insert into {NOME_TABELA}(id_paciente, id_enfermeiro, descricao, data_consulta, hora_consulta, id_local, observacoes) " +
+            string _sql = $"insert into {NOME_TABELA}(idpaciente, idenfermeiro, descricao, dataconsulta, horaconsulta, idlocal, observacoes) " +
                           "values (@IdPaciente, @IdEnfermeiro, @Descricao, @Data, @Hora, @IdLocao, @Observacoes)";
 
             try {
@@ -85,8 +81,8 @@ namespace ConsultaService.Services {
         }
 
         public async Task Update(Agendamento agendamento) {
-            string _sql = $"update {NOME_TABELA} set descricao=@Descricao, data_consulta=@Data, hora_consulta=@Hora, id_local=@IdLocal, observacoes=@Observacoes " +
-                          "where id_paciente=@IdPaciente and id=@Id";
+            string _sql = $"update {NOME_TABELA} set descricao=@Descricao, dataconsulta=@Data, horaconsulta=@Hora, idlocal=@IdLocal, observacoes=@Observacoes " +
+                          "where idpaciente=@IdPaciente and id=@Id";
 
             try {
 
@@ -110,7 +106,7 @@ namespace ConsultaService.Services {
         }
 
         public async Task Delete(int idPaciente, int idAgendamento) {
-            string _sql = $"delete from {NOME_TABELA} where id=@idAgendamento and id_paciente=@iPaciente";
+            string _sql = $"delete from {NOME_TABELA} where id=@idAgendamento and idpaciente=@iPaciente";
 
             try {
                 
