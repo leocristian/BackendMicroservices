@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ConsultaService.Services;
+using ConsultaService.Lib;
 using ConsultaService.Models;
 
 namespace ConsultaService.Controllers {
@@ -8,9 +9,11 @@ namespace ConsultaService.Controllers {
     public class PacientesController : ControllerBase {
 
         public PacientesService _pacientesService;
+        public Generics _generics;
 
-        public PacientesController(PacientesService pacientesService) {
+        public PacientesController(PacientesService pacientesService, Generics generics) {
             _pacientesService = pacientesService;
+            _generics         = generics;
         }
 
         [HttpGet]
@@ -21,7 +24,7 @@ namespace ConsultaService.Controllers {
                 return Ok(pacientes);
             } catch(Exception e) {
                 Console.WriteLine(e.Message);
-                return Problem("Erro interno no servidor", null, 500);
+                return _generics.ErroServer;
             }
         }
 
@@ -45,7 +48,7 @@ namespace ConsultaService.Controllers {
                 return Ok();
             } catch (Exception e) {             
                 Console.WriteLine(e.Message);
-                return Problem("Erro interno no servidor", null, 500);
+                return _generics.ErroServer;
             }            
         }
 
@@ -68,10 +71,10 @@ namespace ConsultaService.Controllers {
                 }
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
-                return Problem("Erro interno no servidor", null, 500);
+                return _generics.ErroServer;
             }
         }
-
+ 
         [HttpDelete]
         [Route("pacientes/{id}")]
         public async Task<IActionResult> Delete(int id) {
@@ -87,7 +90,7 @@ namespace ConsultaService.Controllers {
                 }
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
-                return Problem("Erro interno no servidor", null, 500);
+                return _generics.ErroServer;
             }
         }
     }

@@ -18,7 +18,7 @@ namespace ConsultaService.Services {
 
             IEnumerable<Agendamento> agendamentos = [];
 
-            string _sql = "select id, idpaciente, idenfermeiro, descricao, dataconsulta, horaconsulta, idlocal, observacoes "+
+            string _sql = "select id, idpaciente, idenfermeiro, descricao, dataconsulta, horaconsulta, idlocal, observacoes, status "+
                           $"from {NOME_TABELA} where idpaciente=@idPaciente";
             
             try {
@@ -38,7 +38,7 @@ namespace ConsultaService.Services {
 
             Agendamento? agendamento;
 
-            string _sql = "select id, idpaciente, idenfermeiro, descricao, dataconsulta, horaconsulta, idlocal, observacoes "+
+            string _sql = "select id, idpaciente, idenfermeiro, descricao, dataconsulta, horaconsulta, idlocal, observacoes, status "+
                           $"from {NOME_TABELA} where id=@idAgendamento and idpaciente=@idPaciente";
 
             try {
@@ -56,8 +56,8 @@ namespace ConsultaService.Services {
 
         public async Task Insert(Agendamento agendamento) {
 
-            string _sql = $"insert into {NOME_TABELA}(idpaciente, idenfermeiro, descricao, dataconsulta, horaconsulta, idlocal, observacoes) " +
-                          "values (@IdPaciente, @IdEnfermeiro, @Descricao, @Data, @Hora, @IdLocao, @Observacoes)";
+            string _sql = $"insert into {NOME_TABELA}(idpaciente, idenfermeiro, descricao, dataconsulta, horaconsulta, idlocal, observacoes, status) " +
+                          "values (@IdPaciente, @IdEnfermeiro, @Descricao, @Data, @Hora, @IdLocao, @Observacoes, @Status)";
 
             try {
                 
@@ -68,7 +68,8 @@ namespace ConsultaService.Services {
                     agendamento.Data,
                     agendamento.Hora,
                     agendamento.IdLocal,
-                    agendamento.Observacoes
+                    agendamento.Observacoes,
+                    agendamento.Status
                 };
 
                 if (await conn.ExecuteAsync(_sql, parametros) > 0) {
@@ -81,7 +82,7 @@ namespace ConsultaService.Services {
         }
 
         public async Task Update(Agendamento agendamento) {
-            string _sql = $"update {NOME_TABELA} set descricao=@Descricao, dataconsulta=@Data, horaconsulta=@Hora, idlocal=@IdLocal, observacoes=@Observacoes " +
+            string _sql = $"update {NOME_TABELA} set descricao=@Descricao, dataconsulta=@Data, horaconsulta=@Hora, idlocal=@IdLocal, observacoes=@Observacoes, status=@Status " +
                           "where idpaciente=@IdPaciente and id=@Id";
 
             try {
@@ -114,6 +115,23 @@ namespace ConsultaService.Services {
                     Console.WriteLine("Agendamento deletado com sucesso!");
                 }
         
+            } catch(NpgsqlException e) {
+                throw new NpgsqlException(e.Message);
+            } 
+        }
+
+        public async Task UpdateStatus(int idPaciente, int idAgendamento, string novoStatus) {
+            string _sql = $"update {NOME_TABELA} set status=@novoStatus " +
+                          "where idpaciente=@idPaciente and id=@idAgendamento";
+
+            try {
+
+                var parametros = new { idPaciente, idAgendamento, novoStatus };
+
+                if (await conn.ExecuteAsync(_sql, parametros) > 0) {
+                    Console.WriteLine("Status Atualizado com Sucesso!");
+                }
+                
             } catch(NpgsqlException e) {
                 throw new NpgsqlException(e.Message);
             } 

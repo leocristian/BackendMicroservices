@@ -1,4 +1,5 @@
 using ConsultaService.Services;
+using ConsultaService.Lib;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,8 @@ builder.Services.AddSingleton(ConnectionString);
 
 builder.Services.AddScoped<AgendamentosService>();
 builder.Services.AddScoped<PacientesService>();
+
+builder.Services.AddSingleton<Generics>();
 
 // Métodos para registro de dependências
 // AddSingleton - Cria uma única instância para toda a aplicação.
