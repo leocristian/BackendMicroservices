@@ -29,6 +29,12 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpGet]
+        [Route("/teste")]
+        public IActionResult GetTest() {
+            return Ok("deu certo");
+        }
+
+        [HttpGet]
         [Route("pacientes")]
         public async Task<IActionResult> GetById([FromQuery] int id) {
             Paciente? paciente = await _pacientesService.FindById(id);;

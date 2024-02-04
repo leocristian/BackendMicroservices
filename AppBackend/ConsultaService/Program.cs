@@ -1,6 +1,8 @@
 using ConsultaService.Services;
 using ConsultaService.Lib;
+using ConsultaService.Controllers;
 using Npgsql;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,10 +14,20 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Ler string de conexão 
-string ConnectionString = builder.Configuration["DataBase:ConnString"] 
-?? throw new Exception("DataBase:ConnString não configurada!");
+// string ConnectionString = builder.Configuration["DataBase:ConnString"] 
+
+string ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")!
+?? throw new Exception("DefaultConnection não configurada!");
 
 builder.Services.AddSingleton(new NpgsqlConnection(ConnectionString));
+
+// var pacientesService = new PacientesService(new NpgsqlConnection(ConnectionString));
+
+// var pacientes = await pacientesService.GetAll();
+
+// Console.WriteLine(JsonSerializer.Serialize(pacientes));
+
+Console.WriteLine("Ta rodando");
 
 builder.Services.AddSingleton(ConnectionString);
 

@@ -1,11 +1,30 @@
+name: consulta-microservice
 services:
-  pgdatabase:
+  api:
+    container_name: consulta-container
+    image: consulta-service-container:latest
+    environment:
+        - ASPNETCORE_ENVIRONMENT=docker
+        - ASPNETCORE_URLS=http://+:5092
+    ports:
+      - "5092:5092"
+    depends_on:
+      pgconsultaserver:
+        condition: service_healthy
+
+  pgconsultaserver:
     image: postgres:16
-    container_name: consulta_server
+    container_name: pgconsultaserver
     ports:
         - "5432:5432"
     volumes:
         - "./Database/pg_data:/var/lib/postgresql/data"
     environment:
+        POSTGRES_USER: postgres
         POSTGRES_PASSWORD: admin
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
       
