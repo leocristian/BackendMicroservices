@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ConsultaService.Services;
+using ConsultaService.Lib;
 using ConsultaService.Models;
 
 namespace ConsultaService.Controllers {
@@ -8,26 +9,34 @@ namespace ConsultaService.Controllers {
     public class PacientesController : ControllerBase {
 
         public PacientesService _pacientesService;
+        public Generics _generics;
 
-        public PacientesController(PacientesService pacientesService) {
+        public PacientesController(PacientesService pacientesService, Generics generics) {
             _pacientesService = pacientesService;
+            _generics         = generics;
         }
 
         [HttpGet]
-        [Route("pacientes")]
+        [Route("pacientes/index")]
         public async Task<IActionResult> Get() {
             try {
-                List<Paciente> pacientes = await _pacientesService.GetAll();
-                return Ok(pacientes);    
+                IEnumerable<Paciente> pacientes = await _pacientesService.GetAll();
+                return Ok(pacientes);
             } catch(Exception e) {
                 Console.WriteLine(e.Message);
-                return Problem("Erro interno no servidor", null, 500);
+                return _generics.ErroServer;
             }
         }
 
         [HttpGet]
-        [Route("pacientes/{id}")]
-        public async Task<IActionResult> GetById(int id) {
+        [Route("/teste")]
+        public IActionResult GetTest() {
+            return Ok("deu certo");
+        }
+
+        [HttpGet]
+        [Route("pacientes")]
+        public async Task<IActionResult> GetById([FromQuery] int id) {
             Paciente? paciente = await _pacientesService.FindById(id);;
 
             if (paciente is null) {
@@ -45,7 +54,7 @@ namespace ConsultaService.Controllers {
                 return Ok();
             } catch (Exception e) {             
                 Console.WriteLine(e.Message);
-                return Problem("Erro interno no servidor", null, 500);
+                return _generics.ErroServer;
             }            
         }
 
@@ -68,10 +77,10 @@ namespace ConsultaService.Controllers {
                 }
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
-                return Problem("Erro interno no servidor", null, 500);
+                return _generics.ErroServer;
             }
         }
-
+ 
         [HttpDelete]
         [Route("pacientes/{id}")]
         public async Task<IActionResult> Delete(int id) {
@@ -87,7 +96,7 @@ namespace ConsultaService.Controllers {
                 }
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
-                return Problem("Erro interno no servidor", null, 500);
+                return _generics.ErroServer;
             }
         }
     }

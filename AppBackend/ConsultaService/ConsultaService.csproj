@@ -5,8 +5,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>5412cf63-ad5f-4386-bec0-8b41c5bfb79e</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+
+    <ContainerRepository>consulta-service-container</ContainerRepository>
+    <ContainerImageTags>latest</ContainerImageTags>
+    <PublishProfile>DefaultContainer</PublishProfile>
+    <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
+  
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.28" />
     <PackageReference Include="dotenv.net" Version="3.1.3" />
     <PackageReference Include="Npgsql" Version="8.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />

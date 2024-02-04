@@ -1,43 +1,34 @@
 ﻿using ConsultaService.Models;
-using ConsultaService.Connection;
 using Npgsql;
+using System.Data;
+using Dapper;
+using Microsoft.VisualBasic;
 
 namespace ConsultaService.Services {
     public class PacientesService {
 
         private readonly string NOME_TABELA = "pacientes";
 
-        private readonly PgConnection connection;
+        private readonly NpgsqlConnection conn;
 
-        public PacientesService(PgConnection pgConnection) {
-            connection = pgConnection;
+        public PacientesService(NpgsqlConnection Conn) {
+            conn = Conn;
         }
     
-        public async Task<List<Paciente>> GetAll() {
-            List<Paciente> pacientes = new();
+        public async Task<IEnumerable<Paciente>> GetAll() {
+            IEnumerable<Paciente> pacientes;
             
-            string _sql = $"select * from {NOME_TABELA}";
+            string _sql = $"select id, nomecompleto, email,telefone, datanascimento , cpf, endereco, numerosus from {NOME_TABELA}";
 
-            try {
-             
-                await using NpgsqlCommand command   = connection.dataSource.CreateCommand(_sql);
-                await using NpgsqlDataReader result = await command.ExecuteReaderAsync();
+            try {   
+        
+                await conn.OpenAsync();
+                pacientes = await conn.QueryAsync<Paciente>(_sql);
+                await conn.CloseAsync();
+                
 
-                while (await result.ReadAsync()) {
-                    pacientes.Add(new Paciente(
-                        result.GetFieldValue<int>(0),
-                        result.GetFieldValue<string>(1),
-                        result.GetFieldValue<string>(2),
-                        result.GetFieldValue<string>(3),
-                        result.GetFieldValue<DateTime>(4),
-                        result.GetFieldValue<string>(5),
-                        result.GetFieldValue<string>(6),
-                        result.GetFieldValue<string>(7)
-                    ));
-                }
-
-            } catch(NpgsqlException e) {
-                throw new NpgsqlException(e.Message);
+            } catch(Exception e) {
+                throw new Exception(e.Message);
             }
 
             return pacientes;
@@ -45,26 +36,23 @@ namespace ConsultaService.Services {
 
         public async Task Insert(Paciente paciente) { 
 
-            string _sql = $"insert into {NOME_TABELA}(nome_completo, email, telefone, data_nascimento, cpf, endereco, numero_sus) " +
-                          "values ($1, $2, $3, $4, $5, $6, $7)";
-
+            string _sql = $"insert into {NOME_TABELA}(nomecompleto, email,telefone, datanascimento , cpf, endereco, numerosus) " +
+                          "values (@NomeCompleto, @Email, @Telefone, @DataNascimento, @Cpf, @Endereco, @NumeroSus)";
             try {
-                
-                await using NpgsqlCommand command = new NpgsqlCommand(_sql, await connection.Open()) {
-                    Parameters = {
-                        new() { Value = paciente.NomeCompleto },
-                        new() { Value = paciente.Email },
-                        new() { Value = paciente.Telefone },
-                        new() { Value = paciente.DataNascimento },
-                        new() { Value = paciente.Cpf },
-                        new() { Value = paciente.Endereco },
-                        new() { Value = paciente.NumeroSus },
-                    }
+
+                var parametros = new {
+                    paciente.NomeCompleto,
+                    paciente.Email,
+                    paciente.Telefone,
+                    paciente.DataNascimento,
+                    paciente.Cpf,
+                    paciente.Endereco,
+                    paciente.NumeroSus
                 };
 
-                await command.ExecuteNonQueryAsync();
-
-                Console.WriteLine("Inseriu novo paciente!");
+                if (await conn.ExecuteAsync(_sql, parametros) > 0) {
+                    Console.WriteLine("Paciente Inserido com sucesso!");
+                }
                 
             } catch(NpgsqlException e) {
                 throw new NpgsqlException(e.Message);
@@ -75,25 +63,11 @@ namespace ConsultaService.Services {
 
             Paciente? paciente;
 
-            string _sql = $"select * from {NOME_TABELA} where id = {id}";
-
-            await using NpgsqlCommand command = connection.dataSource.CreateCommand(_sql);
-            await using NpgsqlDataReader result = await command.ExecuteReaderAsync();
-
-            if (await result.ReadAsync()) {
-                paciente = new Paciente(
-                    result.GetFieldValue<int>(0),
-                    result.GetFieldValue<string>(1),
-                    result.GetFieldValue<string>(2),
-                    result.GetFieldValue<string>(3),
-                    result.GetFieldValue<DateTime>(4),
-                    result.GetFieldValue<string>(5),
-                    result.GetFieldValue<string>(6),
-                    result.GetFieldValue<string>(7)
-                );
-            } else {
-                paciente = null;
-            }
+            string _sql = @$"select * from {NOME_TABELA} where id = @id";
+            
+            await conn.OpenAsync();
+            paciente = await conn.QuerySingleOrDefaultAsync<Paciente?>(_sql, new { id });
+            await conn.CloseAsync();
             
             return paciente;
         }
@@ -102,51 +76,36 @@ namespace ConsultaService.Services {
 
             Paciente? paciente;
 
-            string _sql = $"select * from {NOME_TABELA} where cpf = '{cpf}' ";
+            string _sql = $"select * from {NOME_TABELA} where cpf = @cpf ";
 
-            await using NpgsqlCommand command = connection.dataSource.CreateCommand(_sql);
-            await using NpgsqlDataReader result = await command.ExecuteReaderAsync();
-
-            if (await result.ReadAsync()) {
-                paciente = new Paciente(
-                    result.GetFieldValue<int>(0),
-                    result.GetFieldValue<string>(1),
-                    result.GetFieldValue<string>(2),
-                    result.GetFieldValue<string>(3),
-                    result.GetFieldValue<DateTime>(4),
-                    result.GetFieldValue<string>(5),
-                    result.GetFieldValue<string>(6),
-                    result.GetFieldValue<string>(7)
-                );
-            } else {
-                paciente = null;
-            }
-            
+            await conn.OpenAsync();
+            paciente = await conn.QuerySingleOrDefaultAsync<Paciente>(_sql, new { cpf });
+            await conn.CloseAsync();
+                        
             return paciente;
         }
 
         public async Task Update(Paciente paciente) { 
 
-            string _sql = $"update {NOME_TABELA} set nome_completo=$1, email=$2, telefone=$3, data_nascimento=$4, cpf=$5, endereco=$6, numero_sus=$7 " +
-                          "where id=$8";
+            string _sql = $"update {NOME_TABELA} set nomecompleto=@NomeCompleto, email=@Email, telefone=@Telefone, datanascimento=@DataNascimento, cpf=@Cpf, endereco=@Endereco, numerosus=@NumeroSus " +
+                          "where id=@id";
 
             try {
-                await using NpgsqlCommand command = new(_sql, await connection.Open()) {
-                    Parameters = {
-                        new() { Value = paciente.NomeCompleto   },
-                        new() { Value = paciente.Email          },
-                        new() { Value = paciente.Telefone       },
-                        new() { Value = paciente.DataNascimento },
-                        new() { Value = paciente.Cpf            },
-                        new() { Value = paciente.Endereco       },
-                        new() { Value = paciente.NumeroSus      },
-                        new() { Value = paciente.Id             }
-                    }
+                
+                var parametros = new {
+                    paciente.NomeCompleto,
+                    paciente.Email,
+                    paciente.Telefone,
+                    paciente.DataNascimento,
+                    paciente.Cpf,
+                    paciente.Endereco,
+                    paciente.NumeroSus,
+                    paciente.Id
                 };
 
-                await command.ExecuteNonQueryAsync();
-
-                Console.WriteLine("Atualizou paciente!");
+                if (await conn.ExecuteAsync(_sql, parametros) > 0) {
+                    Console.WriteLine("Paciente Atualizado com Sucesso!");
+                }
                 
             } catch(NpgsqlException e) {
                 throw new NpgsqlException(e.Message);
@@ -154,18 +113,13 @@ namespace ConsultaService.Services {
         }
 
         public async Task Delete(int id) {
-            string _sql = $"delete from {NOME_TABELA} where id=$1";
+            string _sql = $"delete from {NOME_TABELA} where id=@id";
 
             try {
-                await using NpgsqlCommand command = new NpgsqlCommand(_sql, await connection.Open()) {
-                    Parameters = {
-                        new() { Value = id }
-                    }
-                };
-
-                await command.ExecuteNonQueryAsync();
-
-                Console.WriteLine("Deletou Paciente!");
+                
+                if (await conn.ExecuteAsync(_sql, new { id }) > 0) {
+                    Console.WriteLine("Deletou Paciente!");
+                }
                 
             } catch(NpgsqlException e) {
                 throw new NpgsqlException(e.Message);
@@ -174,18 +128,13 @@ namespace ConsultaService.Services {
 
         public async Task DeleteAgendamentosFromPaciente(int idPaciente) {
             
-            string _sql = "delete from agendamentos where id_paciente=@p1";
+            string _sql = "delete from agendamentos where id_paciente=@idPaciente";
 
             try {
-                await using NpgsqlCommand command = new NpgsqlCommand(_sql, await connection.Open()) {
-                Parameters = {
-                        new("p1", idPaciente)
+            
+                if (await conn.ExecuteAsync(_sql, new { idPaciente }) > 0) {
+                    Console.WriteLine($"Deletou agendamentos do paciente {idPaciente}");
                 }
-            };
-
-            await command.ExecuteNonQueryAsync();
-
-            Console.WriteLine($"Deletou agendamentos do paciente {idPaciente}");
 
             } catch(NpgsqlException e) {
                 throw new NpgsqlException(e.Message);
