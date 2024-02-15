@@ -20,8 +20,13 @@ namespace ConsultaService.Controllers {
         [Route("pacientes/{id}/agendamentos")]
         public async Task<IActionResult> GetAllFromPaciente(int id) {
 
-            IEnumerable<Agendamento> agendamentos = await _agendamentoService.GetAllFromPaciente(id); 
-            return Ok(agendamentos);
+            try {
+                IEnumerable<Agendamento> agendamentos = await _agendamentoService.GetAllFromPaciente(id); 
+                return Ok(agendamentos);
+            } catch(Exception e) {
+                Console.WriteLine(e.Message);
+                return _generics.ErroServer;
+            }
         }
 
         [HttpGet]

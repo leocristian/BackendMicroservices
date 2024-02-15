@@ -57,16 +57,22 @@ namespace ConsultaService.Services {
         public async Task Insert(Agendamento agendamento) {
 
             string _sql = $"insert into {NOME_TABELA}(idpaciente, idenfermeiro, descricao, dataconsulta, horaconsulta, idlocal, observacoes, status) " +
-                          "values (@IdPaciente, @IdEnfermeiro, @Descricao, @Data, @Hora, @IdLocao, @Observacoes, @Status)";
+                          "values (@IdPaciente, @IdEnfermeiro, @Descricao, to_date(@Data, 'yyyy-MM-dd'), to_timestamp(@Hora, 'hh:mm:ss'), @IdLocal, @Observacoes, @Status)";
 
             try {
                 
+                var data = agendamento.Data.ToString("yyyy-MM-dd");
+                var hora = agendamento.Hora.ToString("hh:mm:ss");
+
+                Console.WriteLine(data);
+                Console.WriteLine(hora);
+
                 var parametros = new {
                     agendamento.IdPaciente,
                     agendamento.IdEnfermeiro,
                     agendamento.Descricao,
-                    agendamento.Data,
-                    agendamento.Hora,
+                    data,
+                    hora,
                     agendamento.IdLocal,
                     agendamento.Observacoes,
                     agendamento.Status
@@ -82,19 +88,29 @@ namespace ConsultaService.Services {
         }
 
         public async Task Update(Agendamento agendamento) {
-            string _sql = $"update {NOME_TABELA} set descricao=@Descricao, dataconsulta=@Data, horaconsulta=@Hora, idlocal=@IdLocal, observacoes=@Observacoes, status=@Status " +
-                          "where idpaciente=@IdPaciente and id=@Id";
+            string _sql = $"update {NOME_TABELA} set descricao=@Descricao, dataconsulta=to_date(@Data, 'yyyy-MM-dd'), horaconsulta=to_timestamp(@Hora, 'hh:mm:ss'), idlocal=@IdLocal, "+
+                           "observacoes=@Observacoes, status=@Status " +
+                           "where idpaciente=@IdPaciente and id=@Id";
 
             try {
 
+
+                var data = agendamento.Data.ToString("yyyy-MM-dd");
+                var hora = agendamento.Hora.ToString("hh:mm:ss");
+
+                Console.WriteLine(data);
+                Console.WriteLine(hora);
+
                 var parametros = new {
+                    agendamento.Id,
                     agendamento.IdPaciente,
                     agendamento.IdEnfermeiro,
                     agendamento.Descricao,
-                    agendamento.Data,
-                    agendamento.Hora,
+                    data,
+                    hora,
                     agendamento.IdLocal,
-                    agendamento.Observacoes
+                    agendamento.Observacoes,
+                    agendamento.Status
                 };
 
                 if (await conn.ExecuteAsync(_sql, parametros) > 0) {
@@ -107,7 +123,7 @@ namespace ConsultaService.Services {
         }
 
         public async Task Delete(int idPaciente, int idAgendamento) {
-            string _sql = $"delete from {NOME_TABELA} where id=@idAgendamento and idpaciente=@iPaciente";
+            string _sql = $"delete from {NOME_TABELA} where id=@idAgendamento and idpaciente=@idPaciente";
 
             try {
                 

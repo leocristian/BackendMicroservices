@@ -128,7 +128,7 @@ namespace ConsultaService.Services {
 
         public async Task DeleteAgendamentosFromPaciente(int idPaciente) {
             
-            string _sql = "delete from agendamentos where id_paciente=@idPaciente";
+            string _sql = "delete from agendamentos where idpaciente=@idPaciente";
 
             try {
             

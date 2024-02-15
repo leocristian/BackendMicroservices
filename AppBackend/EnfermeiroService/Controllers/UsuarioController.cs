@@ -18,7 +18,7 @@ namespace EnfermeiroService.Controllers {
         [Route("enfermeiro/index")]
         public async Task<IActionResult> Index() {
             try {
-                List<Usuario> usuarios = await _usuarioService.GetAll();
+                IEnumerable<Usuario> usuarios = await _usuarioService.GetAll();
                 return Ok(usuarios);    
             } catch(Exception e) {
                 Console.WriteLine(e.Message);
@@ -46,7 +46,7 @@ namespace EnfermeiroService.Controllers {
         public async Task<IActionResult> SignUp(Usuario usuario) {
             try {
                 
-                if (await _usuarioService.ReadByLogin(usuario.Login) is not null) {
+                if (await _usuarioService.UserExists(usuario.Login!)) {
                     return Problem("Já existe um usuário com este login!", null, 409);
                 }else {
                     await _usuarioService.SignUp(usuario);

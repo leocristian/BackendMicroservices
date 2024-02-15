@@ -18,7 +18,7 @@ namespace ApiGateway.Controllers {
 
             try {
 
-                using HttpResponseMessage res = await _client.GetAsync($"pacientes");
+                using HttpResponseMessage res = await _client.GetAsync($"pacientes/index");
 
                 if ((int)res.StatusCode == 200) {
                     string strJson = await res.Content.ReadAsStringAsync();

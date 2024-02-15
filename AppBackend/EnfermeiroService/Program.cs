@@ -1,5 +1,6 @@
 using EnfermeiroService.Connection;
 using EnfermeiroService.Services;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,10 +11,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-string ConnectionString = builder.Configuration["DataBase:ConnString"]
-?? throw new Exception("DataBase:ConnString n„o configurada!");
+string ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+?? throw new Exception("DefaultConnection n√£o configurada!");
 
-builder.Services.AddSingleton(new PgConnection(ConnectionString));
+builder.Services.AddSingleton(new NpgsqlConnection(ConnectionString));
 
 builder.Services.AddScoped<UsuarioService>();
 

@@ -1,14 +1,14 @@
 ﻿namespace ConsultaService.Models {
-    public class Agendamento(int id, int idPaciente, int idEnfermeiro, string descricao, DateOnly data, TimeOnly hora, int idLocal, string observacoes, string status) {
+    public class Agendamento {
 
-        public int Id             { get; set; } = id;
-        public int IdPaciente     { get; set; } = idPaciente;
-        public int IdEnfermeiro   { get; set; } = idEnfermeiro;
-        public string Descricao   { get; set; } = descricao;
-        public DateOnly Data      { get; set; } = data;
-        public TimeOnly Hora      { get; set; } = hora;
-        public int IdLocal        { get; set; } = idLocal;
-        public string Observacoes { get; set; } = observacoes;
-        public string Status      { get; set; } = status;
+        public int Id              { get; set; }
+        public int IdPaciente      { get; set; }
+        public int IdEnfermeiro    { get; set; }
+        public string? Descricao   { get; set; }
+        public DateOnly Data       { get; set; }
+        public TimeOnly Hora       { get; set; }
+        public int IdLocal         { get; set; }
+        public string? Observacoes { get; set; }
+        public string? Status      { get; set; }
     }
 }
