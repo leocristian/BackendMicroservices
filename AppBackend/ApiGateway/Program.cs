@@ -17,9 +17,11 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<Constants>();
 
-builder.Services.AddSingleton(new HttpClient() { BaseAddress = new Uri("http://localhost:5092/") }); 
+builder.Services.AddSingleton(new HttpClient() { BaseAddress = new Uri(builder.Configuration.GetConnectionString("UrlAgendamentosService")!) }); 
 
-string key = builder.Configuration["Settings:JwtKey"] ?? throw new Exception("Settings:JwtKey não configurada!");
+// string key = builder.Configuration["Settings:JwtKey"] ?? throw new Exception("Settings:JwtKey não configurada!");
+
+string key = builder.Configuration.GetConnectionString("JwtKey") ?? throw new Exception("JwtKey não configurada!");
 
 byte[] encodedKey = Encoding.ASCII.GetBytes(key);
 

@@ -16,7 +16,7 @@ namespace ApiGateway {
         public TokenService _tokenService;
 
         public UsuarioServiceController(Constants constants, IConfiguration config, TokenService tokenService) {
-            _client    = new HttpClient() { BaseAddress = new Uri("http://localhost:5091/") };
+            _client    = new HttpClient() { BaseAddress = new Uri(config.GetConnectionString("UrlEnfermeirosService")!) };
             _constants = constants;
             _config    = config;
             _tokenService = tokenService;
