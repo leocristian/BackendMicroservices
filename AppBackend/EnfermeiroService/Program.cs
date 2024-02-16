@@ -4,6 +4,14 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options => {
+    options.AddDefaultPolicy(
+        policy => {
+            policy.WithOrigins("http://ec2-54-90-88-53.compute-1.amazonaws.com");
+        }
+    );
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -27,6 +35,8 @@ if (app.Environment.IsDevelopment()) {
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 
