@@ -4,8 +4,11 @@ using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 builder.Services.AddCors(options => {
-    options.AddDefaultPolicy(
+    options.AddPolicy(
+        name: MyAllowSpecificOrigins,
         policy => {
             policy.WithOrigins("http://ec2-54-90-88-53.compute-1.amazonaws.com");
         }
@@ -36,7 +39,7 @@ if (app.Environment.IsDevelopment()) {
 
 app.UseHttpsRedirection();
 
-app.UseCors();
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 
