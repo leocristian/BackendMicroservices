@@ -1,13 +1,13 @@
 name: consulta-microservice
 services:
   api:
-    container_name: agendamento-container
-    image: microservice-agendamento-container:latest
+    container_name: gateway-container
+    image: microservice-gateway-container:latest
     environment:
         - ASPNETCORE_ENVIRONMENT=docker
-        - ASPNETCORE_URLS=http://+:5092
+        - ASPNETCORE_URLS=http://+:5223
     ports:
-      - "5092:5092"
+      - "5223:5223"
     # depends_on:
     #   pgconsultaserver:
     #     condition: service_healthy
