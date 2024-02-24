@@ -7,10 +7,10 @@ using System.Net;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure forwarded headers
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.KnownProxies.Add(IPAddress.Parse("3.87.199.70"));
-});
+// builder.Services.Configure<ForwardedHeadersOptions>(options =>
+// {
+//     options.KnownProxies.Add(IPAddress.Parse("3.87.199.70"));
+// });
 
 // var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -39,10 +39,10 @@ builder.Services.AddScoped<UsuarioService>();
 
 var app = builder.Build();
 
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-});
+// app.UseForwardedHeaders(new ForwardedHeadersOptions
+// {
+//     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+// });
 
 
 // Configure the HTTP request pipeline.
@@ -55,7 +55,7 @@ if (app.Environment.IsDevelopment()) {
 
 // app.UseCors(MyAllowSpecificOrigins);
 
-app.MapGet("/", () => "Deu certo meu ForwardedHeaderOptions!");
+// app.MapGet("/", () => "Deu certo meu ForwardedHeaderOptions!");
 
 app.UseAuthorization();
 

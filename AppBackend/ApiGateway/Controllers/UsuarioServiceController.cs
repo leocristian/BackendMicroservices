@@ -71,6 +71,8 @@ namespace ApiGateway {
 
                 string usuarioStr = await res.Content.ReadAsStringAsync();
 
+                Console.WriteLine(usuarioStr);
+
                 Usuario? usuario = JsonConvert.DeserializeObject<Usuario>(usuarioStr);
             
                 if (usuario is not null) {
