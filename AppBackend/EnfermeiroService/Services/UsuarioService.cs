@@ -6,7 +6,7 @@ using EnfermeiroService.Lib;
 namespace EnfermeiroService.Services {
     public class UsuarioService {
         
-        private readonly string NOME_TABELA = "enfermeiros";
+        private readonly string NOME_TABELA = "usuarios";
         private readonly NpgsqlConnection conn;
         private readonly string semente;
         private Generics generics;
@@ -20,7 +20,7 @@ namespace EnfermeiroService.Services {
         public async Task<IEnumerable<Usuario>> GetAll() {
             IEnumerable<Usuario> usuarios;
             
-            string _sql = $"select id, cpf, telefone, nomecompleto, coren, login, '' as senha, grupo from {NOME_TABELA}";
+            string _sql = $"select id, cpf, telefone, nomecompleto, registro, login, '' as senha, grupo from {NOME_TABELA}";
 
             try {
              
@@ -38,8 +38,8 @@ namespace EnfermeiroService.Services {
 
         public async Task<Usuario?> ReadByLoginInfo(string username, string senha) {
             Usuario? usuario;
-            string _sql = $"select id, nomecompleto, cpf, telefone, coren, login, grupo "+
-                          $"from enfermeiros where login=@username and senha = @senhaMd5";
+            string _sql = $"select id, nomecompleto, cpf, telefone, registro, login, grupo "+
+                          $"from {NOME_TABELA} where login=@username and senha = @senhaMd5";
 
             await conn.OpenAsync();
 
@@ -53,8 +53,8 @@ namespace EnfermeiroService.Services {
 
         public async Task<Boolean> UserExists(string username) {
             Usuario? usuario;
-            string _sql = $"select id, nomecompleto, cpf, telefone, coren, login, '' as senha, grupo "+
-                          $"from enfermeiros where login=@username";
+            string _sql = $"select id, nomecompleto, cpf, telefone, registro, login, '' as senha, grupo "+
+                          $"from {NOME_TABELA} where login=@username";
 
             await conn.OpenAsync();
             usuario = await conn.QuerySingleOrDefaultAsync<Usuario?>(_sql, new { username });
@@ -66,8 +66,8 @@ namespace EnfermeiroService.Services {
         public async Task SignUp(Usuario usuario) {
             
             
-            string _sql = $"insert into {NOME_TABELA} (cpf, telefone, nomecompleto, coren, login, senha, grupo) " +
-                           "values (@Cpf, @Telefone, @NomeCompleto, @Coren, @Login, @Senha, @Grupo)";
+            string _sql = $"insert into {NOME_TABELA} (cpf, telefone, nomecompleto, registro, login, senha, grupo) " +
+                           "values (@Cpf, @Telefone, @NomeCompleto, @Registro, @Login, @Senha, @Grupo)";
                                                      
             try {
                 
@@ -77,7 +77,7 @@ namespace EnfermeiroService.Services {
                     usuario.Cpf,
                     usuario.Telefone,
                     usuario.NomeCompleto,
-                    usuario.Coren,
+                    usuario.Registro,
                     usuario.Login,
                     usuario.Senha,
                     usuario.Grupo
@@ -96,7 +96,7 @@ namespace EnfermeiroService.Services {
         public async Task<Usuario?> FindById(int id) {
             Usuario? usuario;
 
-            string _sql = $"select id, nomecompleto, cpf, telefone, coren, login, grupo from {NOME_TABELA} where id = @id";
+            string _sql = $"select id, nomecompleto, cpf, telefone, registro, login, grupo from {NOME_TABELA} where id = @id";
             
             await conn.OpenAsync();
             usuario = await conn.QuerySingleOrDefaultAsync<Usuario?>(_sql, new { id });
@@ -121,7 +121,7 @@ namespace EnfermeiroService.Services {
         }
         
         public async Task Update(Usuario usuario) {
-            string _sql = $"update {NOME_TABELA} set nomecompleto=@NomeCompleto, cpf=@Cpf, telefone=@Telefone, coren=@Coren, login=@Login, grupo=@Grupo " +
+            string _sql = $"update {NOME_TABELA} set nomecompleto=@NomeCompleto, cpf=@Cpf, telefone=@Telefone, registro=@Registro, login=@Login, grupo=@Grupo " +
                           "where id=@Id";
 
             try {
@@ -130,7 +130,7 @@ namespace EnfermeiroService.Services {
                     usuario.Cpf,
                     usuario.Telefone,
                     usuario.NomeCompleto,
-                    usuario.Coren,
+                    usuario.Registro,
                     usuario.Login,
                     usuario.Grupo,
                     usuario.Id

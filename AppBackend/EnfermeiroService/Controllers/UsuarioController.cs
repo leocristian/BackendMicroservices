@@ -15,7 +15,7 @@ namespace EnfermeiroService.Controllers {
         }
 
         [HttpGet]
-        [Route("enfermeiro/index")]
+        [Route("/usuario/index")]
         public async Task<IActionResult> Index() {
             try {
                 IEnumerable<Usuario> usuarios = await _usuarioService.GetAll();
@@ -24,16 +24,21 @@ namespace EnfermeiroService.Controllers {
                 Console.WriteLine(e.Message);
                 return Problem("Erro interno no servidor", null, 500);
             }
-        } 
+        }
 
         [HttpPost]
-        [Route("enfermeiro/login")]
+        [Route("/usuario/login")]
         public async Task<IActionResult> Login(LoginInfo loginInfo) {
 
             try {
 
-                Usuario? enfermeiro = await _usuarioService.ReadByLoginInfo(loginInfo.NomeUsuario, loginInfo.Senha);
-                return Ok(enfermeiro);
+                Usuario? usuario = await _usuarioService.ReadByLoginInfo(loginInfo.NomeUsuario, loginInfo.Senha);
+
+                if (usuario is null) {
+                    return NotFound("Usuário não encontrado!");
+                } else {
+                    return Ok(usuario);
+                }
 
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
@@ -42,7 +47,7 @@ namespace EnfermeiroService.Controllers {
         }   
 
         [HttpPost]
-        [Route("enfermeiro/novo")]
+        [Route("/usuario/novo")]
         public async Task<IActionResult> SignUp(Usuario usuario) {
             try {
                 
@@ -59,7 +64,7 @@ namespace EnfermeiroService.Controllers {
         }
 
         [HttpPut]
-        [Route("enfermeiro/{id}")]
+        [Route("/usuario/{id}")]
         public async Task<IActionResult> Put(int id, Usuario usuario) {
             try {
                 
@@ -81,7 +86,7 @@ namespace EnfermeiroService.Controllers {
         }
 
         [HttpDelete]
-        [Route("enfermeiro/{id}")]
+        [Route("/usuario/{id}")]
         public async Task<IActionResult> Delete(int id) {
             try {
                 if (await _usuarioService.FindById(id) is not null) {

@@ -5,7 +5,7 @@ namespace EnfermeiroService.Models {
         public string? Cpf { get; set; }
         public string? Telefone { get; set; }
         public string? NomeCompleto { get; set; }
-        public string? Coren { get; set; }
+        public string? Registro { get; set; }
         public string? Login { get; set; }
         public string? Senha { get; set; }
         public int Grupo { get; set; }

@@ -1,0 +1,64 @@
+
+{
+    "Routes": [
+        {
+            "DownstreamPathTemplate": "/usuario/index",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5091
+                }
+            ],
+            "UpstreamPathTemplate": "/api/usuario/index",
+            "UpstreamHttpMethod": [ "GET" ]
+        },{
+            "DownstreamPathTemplate": "/usuario/login",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5091
+                }
+            ],
+            "UpstreamPathTemplate": "/api/usuario/login",
+            "UpstreamHttpMethod": [ "POST" ]
+        },{
+            "DownstreamPathTemplate": "/usuario/novo",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5091
+                }
+            ],
+            "UpstreamPathTemplate": "/api/usuario/novo",
+            "UpstreamHttpMethod": [ "POST" ]     
+        },{
+            "DownstreamPathTemplate": "/usuario/{id}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5091
+                }
+            ],
+            "UpstreamPathTemplate": "/api/usuario/{id}",
+            "UpstreamHttpMethod": [ "PUT" ]     
+        },{
+            "DownstreamPathTemplate": "/usuario/{id}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5091
+                }
+            ],
+            "UpstreamPathTemplate": "/api/usuario/{id}",
+            "UpstreamHttpMethod": [ "DELETE" ]     
+        }
+    ],
+    "GlobalConfiguration": {
+        "BaseUrl":"http://localhost:5209"
+    }
+}
