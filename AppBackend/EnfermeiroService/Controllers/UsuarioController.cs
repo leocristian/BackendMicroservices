@@ -100,5 +100,23 @@ namespace EnfermeiroService.Controllers {
                 return Problem("Erro interno no servidor!", null, 500);
             }
         }
+
+        [HttpGet]
+        [Route("/usuario/{id}")]
+        public async Task<IActionResult> Get(int id) {
+            try {
+                
+                Usuario? usuario = await _usuarioService.FindById(id);
+
+                if (usuario is not null) {
+                    return Ok(usuario);
+                } else {
+                    return NotFound();
+                }
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return Problem("Erro interno no servidor!", null, 500);
+            }
+        }
     }
 }

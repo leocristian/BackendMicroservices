@@ -17,7 +17,7 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpGet]
-        [Route("pacientes/{id}/agendamentos")]
+        [Route("paciente/{id}/agendamento/index")]
         public async Task<IActionResult> GetAllFromPaciente(int id) {
 
             try {
@@ -29,8 +29,23 @@ namespace ConsultaService.Controllers {
             }
         }
 
+        [HttpPost]
+        [Route("paciente/{id}/agendamento/novo")]
+        public async Task<IActionResult> Post(Agendamento agendamento, int id) {
+
+            try {
+                agendamento.IdPaciente = id;
+                await _agendamentoService.Insert(agendamento);
+                return Ok("Agendamento realizado com sucesso!");
+            } catch (Exception e) {
+                Console.WriteLine(e.Message);
+                return _generics.ErroServer;
+            }
+        }
+
+
         [HttpGet]
-        [Route("pacientes/{idPaciente}/agendamentos/{idAgendamento}")]
+        [Route("paciente/{idPaciente}/agendamento/{idAgendamento}")]
         public async Task<IActionResult> GetById(int idPaciente, int idAgendamento) {
             try {
 
@@ -47,22 +62,8 @@ namespace ConsultaService.Controllers {
             }
         }
 
-        [HttpPost]
-        [Route("pacientes/{id}/agendamentos/novo")]
-        public async Task<IActionResult> Post(Agendamento agendamento, int id) {
-
-            try {
-                agendamento.IdPaciente = id;
-                await _agendamentoService.Insert(agendamento);
-                return Ok("Agendamento realizado com sucesso!");
-            } catch (Exception e) {
-                Console.WriteLine(e.Message);
-                return _generics.ErroServer;
-            }
-        }
-
         [HttpPut]
-        [Route("pacientes/{idPaciente}/agendamentos/{idAgendamento}")]
+        [Route("paciente/{idPaciente}/agendamento/{idAgendamento}")]
         public async Task<IActionResult> Put(int idPaciente, int idAgendamento, Agendamento agendamento) {
 
             try {
@@ -83,7 +84,7 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpPatch]
-        [Route ("pacientes/{idPaciente}/agendamentos/{idAgendamento}")]
+        [Route ("paciente/{idPaciente}/agendamento/{idAgendamento}")]
         public async Task<IActionResult> AtualizarStatus(int idPaciente, int idAgendamento, string novoStatus) {
             
             try { 
@@ -98,7 +99,7 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpDelete]
-        [Route("pacientes/{idPaciente}/agendamentos/{idAgendamento}")]
+        [Route("paciente/{idPaciente}/agendamento/{idAgendamento}")]
         public async Task<IActionResult> Delete(int idPaciente, int idAgendamento) {
 
             try {

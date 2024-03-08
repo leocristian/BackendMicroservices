@@ -99,7 +99,7 @@ namespace EnfermeiroService.Services {
             string _sql = $"select id, nomecompleto, cpf, telefone, registro, login, grupo from {NOME_TABELA} where id = @id";
             
             await conn.OpenAsync();
-            usuario = await conn.QuerySingleOrDefaultAsync<Usuario?>(_sql, new { id });
+            usuario = await conn.QuerySingleOrDefaultAsync<Usuario>(_sql, new { id });
             await conn.CloseAsync();
             
             return usuario;

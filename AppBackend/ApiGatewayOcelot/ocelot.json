@@ -44,18 +44,73 @@
                 }
             ],
             "UpstreamPathTemplate": "/api/usuario/{id}",
-            "UpstreamHttpMethod": [ "PUT" ]     
+            "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ]     
         },{
-            "DownstreamPathTemplate": "/usuario/{id}",
+            "DownstreamPathTemplate": "/paciente/index",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 5091
+                    "Port": 5092
                 }
             ],
-            "UpstreamPathTemplate": "/api/usuario/{id}",
-            "UpstreamHttpMethod": [ "DELETE" ]     
+            "UpstreamPathTemplate": "/api/paciente/index",
+            "UpstreamHttpMethod": [ "GET" ]
+        },{
+            "DownstreamPathTemplate": "/paciente/novo",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5092
+                }
+            ],
+            "UpstreamPathTemplate": "/api/paciente/novo",
+            "UpstreamHttpMethod": [ "POST" ]
+        },{
+            "DownstreamPathTemplate": "/paciente/{id}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5092
+                }
+            ],
+            "UpstreamPathTemplate": "/api/paciente/{id}",
+            "UpstreamHttpMethod": [ "GET", "PUT", "DELETE"]
+        },{
+            "DownstreamPathTemplate": "/paciente/{id/agendamento/index",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5092
+                }
+            ],
+            "UpstreamPathTemplate": "/api/paciente/{id/agendamento/index",
+            "UpstreamHttpMethod": [ "GET" ]
+        },{
+            "DownstreamPathTemplate": "/paciente/{id}/agendamento/novo",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5092
+                }
+            ],
+            "UpstreamPathTemplate": "/api/paciente/{id}/agendamento/novo",
+            "UpstreamHttpMethod": [ "POST" ]
+        },{
+            "DownstreamPathTemplate": "/paciente/{idPaciente}/agendamento/{idAgendamento}",
+            "DownstreamScheme": "http",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 5092
+                }
+            ],
+            "UpstreamPathTemplate": "/api/paciente/{idPaciente}/agendamento/{idAgendamento}",
+            "UpstreamHttpMethod": [ "GET", "PUT", "PATCH", "DELETE" ]
         }
     ],
     "GlobalConfiguration": {

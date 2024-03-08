@@ -17,7 +17,7 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpGet]
-        [Route("pacientes/index")]
+        [Route("paciente/index")]
         public async Task<IActionResult> Get() {
             try {
                 IEnumerable<Paciente> pacientes = await _pacientesService.GetAll();
@@ -29,14 +29,8 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpGet]
-        [Route("/teste")]
-        public IActionResult GetTest() {
-            return Ok("deu certo");
-        }
-
-        [HttpGet]
-        [Route("pacientes")]
-        public async Task<IActionResult> GetById([FromQuery] int id) {
+        [Route("paciente/{id}")]
+        public async Task<IActionResult> GetById(int id) {
             Paciente? paciente = await _pacientesService.FindById(id);;
 
             if (paciente is null) {
@@ -47,7 +41,7 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpPost]
-        [Route("pacientes/novo")]
+        [Route("paciente/novo")]
         public async Task<IActionResult> Post(Paciente paciente) {
             try { 
                 await _pacientesService.Insert(paciente);
@@ -59,7 +53,7 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpPut]
-        [Route("pacientes/{id}")]
+        [Route("paciente/{id}")]
         public async Task<IActionResult> Put(int id, Paciente paciente) {
             try {
 
@@ -82,7 +76,7 @@ namespace ConsultaService.Controllers {
         }
  
         [HttpDelete]
-        [Route("pacientes/{id}")]
+        [Route("paciente/{id}")]
         public async Task<IActionResult> Delete(int id) {
             try {
                 if (await _pacientesService.FindById(id) is not null) {
