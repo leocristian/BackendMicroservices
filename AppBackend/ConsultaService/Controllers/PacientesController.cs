@@ -81,7 +81,7 @@ namespace ConsultaService.Controllers {
             try {
                 if (await _pacientesService.FindById(id) is not null) {
 			
-		            await _pacientesService.DeleteAgendamentosFromPaciente(id);	
+		            await _pacientesService.DeleteConsultasFromPaciente(id);	
                     await _pacientesService.Delete(id);
 
                     return Ok();

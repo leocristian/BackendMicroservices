@@ -31,7 +31,7 @@ Console.WriteLine("Ta rodando");
 
 builder.Services.AddSingleton(ConnectionString);
 
-builder.Services.AddScoped<AgendamentosService>();
+builder.Services.AddScoped<ConsultasService>();
 builder.Services.AddScoped<PacientesService>();
 
 builder.Services.AddSingleton<Generics>();

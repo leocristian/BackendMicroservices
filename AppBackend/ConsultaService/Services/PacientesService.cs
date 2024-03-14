@@ -18,10 +18,10 @@ namespace ConsultaService.Services {
         public async Task<IEnumerable<Paciente>> GetAll() {
             IEnumerable<Paciente> pacientes;
             
-            string _sql = $"select id, nomecompleto, email,telefone, datanascimento , cpf, endereco, numerosus from {NOME_TABELA}";
+            string _sql = $"select * from {NOME_TABELA}";
 
-            try {   
-        
+            try {           
+                
                 await conn.OpenAsync();
                 pacientes = await conn.QueryAsync<Paciente>(_sql);
                 await conn.CloseAsync();
@@ -36,19 +36,22 @@ namespace ConsultaService.Services {
 
         public async Task Insert(Paciente paciente) { 
 
-            string _sql = $"insert into {NOME_TABELA}(nomecompleto, email,telefone, datanascimento , cpf, endereco, numerosus) " +
-                          "values (@NomeCompleto, @Email, @Telefone, @DataNascimento, @Cpf, @Endereco, @NumeroSus)";
+            string _sql = $"insert into {NOME_TABELA} (nomecompleto, telefone, email, datanascimento, datainiciogravidez, cpf, bairro, endereco, numerosus) " +
+                          "values (@NomeCompleto, @Telefone, @Email, @DataNascimento, @DataInicioGravidez, @Cpf, @Bairro, @Endereco, @NumeroSus)";
             try {
 
                 var parametros = new {
                     paciente.NomeCompleto,
-                    paciente.Email,
                     paciente.Telefone,
+                    paciente.Email,
                     paciente.DataNascimento,
+                    paciente.DataInicioGravidez,
                     paciente.Cpf,
+                    paciente.Bairro,
                     paciente.Endereco,
                     paciente.NumeroSus
                 };
+        
 
                 if (await conn.ExecuteAsync(_sql, parametros) > 0) {
                     Console.WriteLine("Paciente Inserido com sucesso!");
@@ -87,17 +90,27 @@ namespace ConsultaService.Services {
 
         public async Task Update(Paciente paciente) { 
 
-            string _sql = $"update {NOME_TABELA} set nomecompleto=@NomeCompleto, email=@Email, telefone=@Telefone, datanascimento=@DataNascimento, cpf=@Cpf, endereco=@Endereco, numerosus=@NumeroSus " +
-                          "where id=@id";
+            string _sql = $"update {NOME_TABELA} set "+
+                           "nomecompleto=@NomeCompleto, "+
+                           "telefone=@Telefone, "+
+                           "email=@Email, "+
+                           "datanascimento=@DataNascimento, "+
+                           "datainiciogravidez=@DataInicioGravidez, "+
+                           "cpf=@Cpf, "+
+                           "endereco=@Endereco, "+
+                           "numerosus=@NumeroSus " +
+                           "where id=@id";
 
             try {
                 
                 var parametros = new {
                     paciente.NomeCompleto,
-                    paciente.Email,
                     paciente.Telefone,
+                    paciente.Email,
                     paciente.DataNascimento,
+                    paciente.DataInicioGravidez,
                     paciente.Cpf,
+                    paciente.Bairro,
                     paciente.Endereco,
                     paciente.NumeroSus,
                     paciente.Id
@@ -126,14 +139,14 @@ namespace ConsultaService.Services {
             }            
         }
 
-        public async Task DeleteAgendamentosFromPaciente(int idPaciente) {
+        public async Task DeleteConsultasFromPaciente(int idPaciente) {
             
-            string _sql = "delete from agendamentos where idpaciente=@idPaciente";
+            string _sql = "delete from consultas where idpaciente=@idPaciente";
 
             try {
             
                 if (await conn.ExecuteAsync(_sql, new { idPaciente }) > 0) {
-                    Console.WriteLine($"Deletou agendamentos do paciente {idPaciente}");
+                    Console.WriteLine($"Deletou consultas do paciente {idPaciente}");
                 }
 
             } catch(NpgsqlException e) {

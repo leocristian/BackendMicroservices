@@ -6,23 +6,23 @@ using ConsultaService.Lib;
 namespace ConsultaService.Controllers {
 
     [ApiController]
-    public class AgendamentosController : ControllerBase {
+    public class ConsultasController : ControllerBase {
 
-        public AgendamentosService _agendamentoService;
+        public ConsultasService _consultasService;
         public Generics _generics;
 
-        public AgendamentosController(AgendamentosService agendamentoService, Generics generics) {
-            _agendamentoService = agendamentoService;
-            _generics           = generics;
+        public ConsultasController(ConsultasService consultasService, Generics generics) {
+            _consultasService = consultasService;
+            _generics         = generics;
         }
 
         [HttpGet]
-        [Route("paciente/{id}/agendamento/index")]
+        [Route("paciente/{id}/consulta/index")]
         public async Task<IActionResult> GetAllFromPaciente(int id) {
 
             try {
-                IEnumerable<Agendamento> agendamentos = await _agendamentoService.GetAllFromPaciente(id); 
-                return Ok(agendamentos);
+                IEnumerable<Consulta> consultas = await _consultasService.GetAllFromPaciente(id); 
+                return Ok(consultas);
             } catch(Exception e) {
                 Console.WriteLine(e.Message);
                 return _generics.ErroServer;
@@ -30,13 +30,13 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpPost]
-        [Route("paciente/{id}/agendamento/novo")]
-        public async Task<IActionResult> Post(Agendamento agendamento, int id) {
+        [Route("paciente/{id}/consulta/novo")]
+        public async Task<IActionResult> Post(Consulta consulta, int id) {
 
             try {
-                agendamento.IdPaciente = id;
-                await _agendamentoService.Insert(agendamento);
-                return Ok("Agendamento realizado com sucesso!");
+                consulta.IdPaciente = id;
+                await _consultasService.Insert(consulta);
+                return Ok("Consulta realizado com sucesso!");
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
                 return _generics.ErroServer;
@@ -45,14 +45,14 @@ namespace ConsultaService.Controllers {
 
 
         [HttpGet]
-        [Route("paciente/{idPaciente}/agendamento/{idAgendamento}")]
-        public async Task<IActionResult> GetById(int idPaciente, int idAgendamento) {
+        [Route("paciente/{idPaciente}/consulta/{idConsulta}")]
+        public async Task<IActionResult> GetById(int idPaciente, int idConsulta) {
             try {
 
-                Agendamento? agendamento = await _agendamentoService.GetById(idPaciente, idAgendamento);
+                Consulta? consulta = await _consultasService.GetById(idPaciente, idConsulta);
 
-                if (agendamento is not null) {
-                    return Ok(agendamento);
+                if (consulta is not null) {
+                    return Ok(consulta);
                 } else {
                     return NotFound();
                 }
@@ -63,19 +63,19 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpPut]
-        [Route("paciente/{idPaciente}/agendamento/{idAgendamento}")]
-        public async Task<IActionResult> Put(int idPaciente, int idAgendamento, Agendamento agendamento) {
+        [Route("paciente/{idPaciente}/consulta/{idConsulta}")]
+        public async Task<IActionResult> Put(int idPaciente, int idConsulta, Consulta consulta) {
 
             try {
-                if (idAgendamento != agendamento.Id) {
+                if (idConsulta != consulta.Id) {
                     return BadRequest("Requisição Inválida!");
                 } else {
 
-                    agendamento.IdPaciente = idPaciente;
-                    agendamento.Id         = idAgendamento;
+                    consulta.IdPaciente = idPaciente;
+                    consulta.Id         = idConsulta;
                     
-                    await _agendamentoService.Update(agendamento);
-                    return Ok("Agendamento alterado com sucesso!");
+                    await _consultasService.Update(consulta);
+                    return Ok("Consulta alterado com sucesso!");
                 }
             } catch(Exception e) {
                 Console.WriteLine(e.Message);
@@ -84,12 +84,12 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpPatch]
-        [Route ("paciente/{idPaciente}/agendamento/{idAgendamento}")]
-        public async Task<IActionResult> AtualizarStatus(int idPaciente, int idAgendamento, string novoStatus) {
+        [Route ("paciente/{idPaciente}/consulta/{idConsulta}")]
+        public async Task<IActionResult> AtualizarStatus(int idPaciente, int idConsulta, string novoStatus) {
             
             try { 
                 
-                await _agendamentoService.UpdateStatus(idPaciente, idAgendamento, novoStatus);
+                await _consultasService.UpdateStatus(idPaciente, idConsulta, novoStatus);
                 return Ok("Status Alterado com Sucesso!");
 
             } catch(Exception e) {
@@ -99,15 +99,15 @@ namespace ConsultaService.Controllers {
         }
 
         [HttpDelete]
-        [Route("paciente/{idPaciente}/agendamento/{idAgendamento}")]
-        public async Task<IActionResult> Delete(int idPaciente, int idAgendamento) {
+        [Route("paciente/{idPaciente}/consulta/{idConsulta}")]
+        public async Task<IActionResult> Delete(int idPaciente, int idConsulta) {
 
             try {
-                if (await _agendamentoService.GetById(idPaciente, idAgendamento) is not null) {
-                    await _agendamentoService.Delete(idPaciente, idAgendamento);
-                    return Ok("Agendamento Excluído com Sucesso!");
+                if (await _consultasService.GetById(idPaciente, idConsulta) is not null) {
+                    await _consultasService.Delete(idPaciente, idConsulta);
+                    return Ok("Consulta Excluído com Sucesso!");
                 } else {
-                    return NotFound("Agendamento não encontrado!");
+                    return NotFound("Consulta não encontrado!");
                 }
             } catch (Exception e) {
                 Console.WriteLine(e.Message);
