@@ -79,7 +79,7 @@
             "UpstreamPathTemplate": "/api/paciente/{id}",
             "UpstreamHttpMethod": [ "GET", "PUT", "DELETE"]
         },{
-            "DownstreamPathTemplate": "/paciente/{id/agendamento/index",
+            "DownstreamPathTemplate": "/paciente/{id}/agendamento/index",
             "DownstreamScheme": "http",
             "DownstreamHostAndPorts": [
                 {
@@ -87,7 +87,7 @@
                     "Port": 5092
                 }
             ],
-            "UpstreamPathTemplate": "/api/paciente/{id/agendamento/index",
+            "UpstreamPathTemplate": "/api/paciente/{id}/agendamento/index",
             "UpstreamHttpMethod": [ "GET" ]
         },{
             "DownstreamPathTemplate": "/paciente/{id}/agendamento/novo",

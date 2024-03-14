@@ -18,10 +18,11 @@ namespace ConsultaService.Services {
         public async Task<IEnumerable<Paciente>> GetAll() {
             IEnumerable<Paciente> pacientes;
             
-            string _sql = $"select * from {NOME_TABELA}";
+            string _sql = $"select id, idEnfermeiro, nomeCompleto, telefone, email, to_char(dataNascimento, 'yyyy-MM-dd'), to_char(dataInicioGravidez, 'yyyy-MM-dd'), cpf, bairro, endereco, numeroSus from {NOME_TABELA}";
 
             try {           
                 
+                await conn.CloseAsync();
                 await conn.OpenAsync();
                 pacientes = await conn.QueryAsync<Paciente>(_sql);
                 await conn.CloseAsync();
@@ -36,16 +37,20 @@ namespace ConsultaService.Services {
 
         public async Task Insert(Paciente paciente) { 
 
-            string _sql = $"insert into {NOME_TABELA} (nomecompleto, telefone, email, datanascimento, datainiciogravidez, cpf, bairro, endereco, numerosus) " +
-                          "values (@NomeCompleto, @Telefone, @Email, @DataNascimento, @DataInicioGravidez, @Cpf, @Bairro, @Endereco, @NumeroSus)";
+            string _sql = $"insert into {NOME_TABELA} (idenfermeiro, nomecompleto, telefone, email, datanascimento, datainiciogravidez, cpf, bairro, endereco, numerosus) " +
+                          "values (@IdEnfermeiro, @NomeCompleto, @Telefone, @Email, to_date(@DataNascimento, 'yyyy-MM-dd'), to_date(@DataInicioGravidez, 'yyyy-MM-dd'), @Cpf, @Bairro, @Endereco, @NumeroSus)";
             try {
+                
+                var DataNascimento     = paciente.DataNascimento.ToString("yyyy-MM-dd");
+                var DataInicioGravidez = paciente.DataInicioGravidez.ToString("yyyy-MM-dd");
 
                 var parametros = new {
+                    paciente.IdEnfermeiro,
                     paciente.NomeCompleto,
                     paciente.Telefone,
                     paciente.Email,
-                    paciente.DataNascimento,
-                    paciente.DataInicioGravidez,
+                    DataNascimento,
+                    DataInicioGravidez,
                     paciente.Cpf,
                     paciente.Bairro,
                     paciente.Endereco,
@@ -55,6 +60,7 @@ namespace ConsultaService.Services {
 
                 if (await conn.ExecuteAsync(_sql, parametros) > 0) {
                     Console.WriteLine("Paciente Inserido com sucesso!");
+                    await conn.CloseAsync();
                 }
                 
             } catch(NpgsqlException e) {
@@ -68,6 +74,7 @@ namespace ConsultaService.Services {
 
             string _sql = @$"select * from {NOME_TABELA} where id = @id";
             
+            await conn.CloseAsync();
             await conn.OpenAsync();
             paciente = await conn.QuerySingleOrDefaultAsync<Paciente?>(_sql, new { id });
             await conn.CloseAsync();
@@ -81,6 +88,7 @@ namespace ConsultaService.Services {
 
             string _sql = $"select * from {NOME_TABELA} where cpf = @cpf ";
 
+            await conn.CloseAsync();        
             await conn.OpenAsync();
             paciente = await conn.QuerySingleOrDefaultAsync<Paciente>(_sql, new { cpf });
             await conn.CloseAsync();
@@ -118,6 +126,7 @@ namespace ConsultaService.Services {
 
                 if (await conn.ExecuteAsync(_sql, parametros) > 0) {
                     Console.WriteLine("Paciente Atualizado com Sucesso!");
+                    await conn.CloseAsync();
                 }
                 
             } catch(NpgsqlException e) {
@@ -132,6 +141,7 @@ namespace ConsultaService.Services {
                 
                 if (await conn.ExecuteAsync(_sql, new { id }) > 0) {
                     Console.WriteLine("Deletou Paciente!");
+                    await conn.CloseAsync();
                 }
                 
             } catch(NpgsqlException e) {
@@ -147,6 +157,7 @@ namespace ConsultaService.Services {
             
                 if (await conn.ExecuteAsync(_sql, new { idPaciente }) > 0) {
                     Console.WriteLine($"Deletou consultas do paciente {idPaciente}");
+                    await conn.CloseAsync();
                 }
 
             } catch(NpgsqlException e) {

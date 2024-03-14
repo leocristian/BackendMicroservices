@@ -46,6 +46,8 @@ namespace EnfermeiroService.Services {
             var senhaMd5 = generics.Md5(semente+senha+semente);
 
             usuario = await conn.QuerySingleOrDefaultAsync<Usuario>(_sql, new { username, senhaMd5 });
+
+            Console.WriteLine(usuario?.NomeCompleto);
             await conn.CloseAsync();
 
             return usuario;

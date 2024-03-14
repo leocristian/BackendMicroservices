@@ -12,6 +12,7 @@ drop table pacientes;
 CREATE TABLE IF NOT EXISTS public.pacientes
 (
     id serial NOT NULL, 
+    idEnfermeiro integer not null,
     nomecompleto character varying(100) NOT NULL,
     telefone character varying(11),
     datanascimento date NOT NULL,
