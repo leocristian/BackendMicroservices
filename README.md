@@ -1,2 +1,2 @@
 # BackendMicroservices
-App desenvolvido durante a disciplina de tópicos especiais em engenharia de software
+App desenvolvido para estudo da ferramenta ocelot (api gateway)
